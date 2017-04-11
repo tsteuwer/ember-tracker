@@ -29,6 +29,9 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+		ENV.analyticsSettings = {
+			trackingId: 'UA-97028033-2',
+		};
   }
 
   if (environment === 'test') {
@@ -43,7 +46,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+		ENV.analyticsSettings = {
+			trackingId: 'UA-97028033-2',
+		};
   }
 
   return ENV;
