@@ -1,5 +1,5 @@
 {
-  "name": "ember-analytics",
+  "name": "ember-tracker",
   "version": "0.1.0",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
@@ -11,7 +11,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "https://github.com/tsteuwer/ember-tracker.git",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
