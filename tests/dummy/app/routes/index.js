@@ -1,12 +1,5 @@
-import Ember from 'ember';
-import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
+import BaseRoute from '../-privates/routes/base';
 
-export default Ember.Route.extend(GoogleAnalyticsRoute, {
-	title: 'Ember Analytics',
-	model() {
-		const googleAnalytics = this.get('googleAnalytics');
-		return {
-			googleAnalytics,
-		};
-	}
+export default BaseRoute.extend({
+	title: 'Ember Tracker: A simpler way to track your Ember JS application.',
 });

@@ -7,6 +7,8 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('google-analytics');
+  this.route('tealium');
 });
 
 export default Router;

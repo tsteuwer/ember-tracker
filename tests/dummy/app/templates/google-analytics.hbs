@@ -1,0 +1,84 @@
+<h3>Google Analytics</h3>
+<hr>
+<h4>API</h4>
+<p>With the Google Analytics service, you have access to four methods.</p>
+<ol>
+	<li><code>event(category:String, action:String, label:String, value:Number: fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/events">Documentation</a></li>
+	<li><code>pageview(page:String, title:String)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/pages">Documentation</a></li>
+	<ul>
+		<li>Note: <code>page</code> is used to <code>ga('set', 'page', page)</code> so that all other methods get sent under the correct route.</li>
+	</ul>
+	<li><code>social(network:String, action:String, target:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/social-interactions">Documentation</a></li>
+	<li><code>timing(category:String, timingVar:String, timingVar:Number, timingLabel:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings">Documentation</a></li>
+</ol>
+<hr>
+<h4>Tracking Routes</h4>
+<p>Import and add the mixin to any route you wish to track. For page titles, it will first look for a property on the route called <code>title</code>. If that doesn't exist, it will then look at the <code>window.document.title</code> property.</p>
+<pre>import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
+
+export default Ember.Route.extend(GoogleAnalyticsRoute, {
+	//...
+});</pre>
+<p>By default, the addon will send the <code>location.pathname</code> as the page URL. However, you can override this by adding a method on your route called <code>beforeAnalyticsPageview</code> which returns an object with either a <code>title</code> or <code>page</code> (or both) property and it will use that to set the page/title and send the event.
+</p>
+<hr>
+<h4>Tracking Events</h4>
+<p><strong>Example #1</strong></p>
+<p>Events are very simple and there are two ways of handling them. The first is the inject the service and call the <code>event</code>, <code>timing</code>, or <code>social</code> methods.</p>
+<pre>import Ember from 'ember';
+
+export default Ember.Component.extend({
+	googleAnalytics: Ember.inject.service(),
+	// ...
+	actions: {
+		toggleFormState() {
+			this.toggleProperty('showing');
+			this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
+		},
+		tweetThis() {
+			//...
+			this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
+		},
+		//...
+	},
+});
+</pre>
+<div class="alert alert-info">
+	Note: You're only required to have a category and event type (e.g. 'click'). Additionally, you can inject the service into anything you want, say a controller or route.
+</div>
+<strong>Example #2</strong>
+<p>The second way of handling events is by including the mixin into your components. This only includes the <code>event</code> method.</p>
+<pre>import Ember from 'ember';
+import GoogleAnalyticsComponent from 'ember-tracker/mixin/google-analytics-component';
+
+export default Ember.Component.extend(GoogleAnalyticsComponent, {
+// ...
+});</pre>
+<p>Once you've included the mixin, you now have access to several actions.</p>
+<pre>&lt;div class="row"&gt;
+	&lt;button &#123;&#123;action "sendEvent" "My Category" "Toggle Form State"&#125;&#125;&gt;
+		Toggle Form
+	&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class="row"&gt;
+	&lt;div &#123;&#123;action "sendEvent" "My Category" "I hovered" on="hover"&#125;&#125;&gt;
+		Hover over me	
+	&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+<p>Or, you can use it inside your component much like <strong>Example 1</strong>:</p>
+<pre>import Ember from 'ember';
+import GoogleAnalyticsComponent from 'ember-tracker/mixin/google-analytics-component';
+
+export default Ember.Component.extend(GoogleAnalyticsComponent, {
+	// ...	
+	actions: {
+		someActionHandler() {
+			this.send('sendEvent', 'My Category', 'click', 'My Label');
+		},
+	},
+});</pre>
+<div class="alert alert-info">
+	Note: If you add the <code>sendEvent</code> action onto a non-ember anchor tag, you must add <code>preventDefault=false</code> as the final parameter of the action.
+</div>
+{{outlet}}

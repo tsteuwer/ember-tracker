@@ -1,97 +1,13 @@
-<div class="container">
-  <div class="pull-right badges">
-    <a class="top-badge" href={{model.npmLink}}>
-      <img src={{model.npmBadge}} />
-    </a>
-    <a class="top-badge" href={{model.travisLink}}>
-      <img src={{model.travisBadge}} />
-    </a>
-    <a class="top-badge github-logo" href={{model.githubLink}}>
-      <img width="32px" height="32px" src="/images/GitHub-Mark-32px.png" />
-    </a>
-  </div>
-  <h1>Ember Tracker</h1>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Installation</strong>
-    </div>
-    <div class="panel-body">
-			<p>Install the addon simply by using the following command.</p>
-			<pre>ember install ember-tracker</pre>
-		</div>
+<p>
+<code>ember-tracker</code> is a simple <a href="https://emberjs.com">Ember</a> addon which easily implements popular tracking software such as {{#link-to "google-analytics"}}Google Analytics{{/link-to}} and {{#link-to "tealium"}}Tealium{{/link-to}}.
+</p>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Installation</strong>
 	</div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Tracking Routes</strong>
-    </div>
-    <div class="panel-body">
-			<p>Import and add the mixin to any route you wish to track. For page titles, it will first look for a property on the route called <code>title</code>. If that doesn't exist, it will then look at the <code>window.document.title</code> property.</p>
-			<pre>import GoogleAnalyticsRoute from 'ember-g-analytics/mixins/google-analytics-route';
-
-export default Ember.Route.extend(GoogleAnalyticsRoute, {
-	//...
-});</pre>
-    </div>
+	<div class="panel-body">
+		<p>Install the addon simply by using the following command.</p>
+		<pre>ember install ember-tracker</pre>
 	</div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Tracking Events</strong>
-    </div>
-    <div class="panel-body">
-			<p><strong>Example #1</strong></p>
-			<p>Events are very simple and there are two ways of handling them. The first is the inject the service and call the <code>event</code>, <code>timing</code>, or <code>social</code> methods.</p>
-			<pre>import Ember from 'ember';
-
-export default Ember.Component.extend({
-	googleAnalytics: Ember.inject.service(),
-	// ...
-	actions: {
-		toggleFormState() {
-			this.toggleProperty('showing');
-			this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
-		},
-		tweetThis() {
-			//...
-			this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
-		},
-		//...
-	},
-});
-</pre>
-			<div class="alert alert-info">
-				Note: You're only required to have a category and event type (e.g. 'click'). Additionally, you can inject the service into anything you want, say a controller or route.
-			</div>
-			<p><strong>Example #2</strong></p>
-			<p>The second way of handling events is by including the mixin into your components.</p>
-			<pre>import Ember from 'ember';
-import GoogleAnalyticsComponent from 'ember-g-analytics/mixin/google-analytics-component';
-
-export default Ember.Component.extend(GoogleAnalyticsComponent, {
-	// ...
-});</pre>
-			<p>Once you've included the mixin, you now have access to several actions.</p>
-			<pre>&lt;div class="row"&gt;
-	&lt;button &#123;&#123;action "sendEvent" "My Category" "Toggle Form State"&#125;&#125;&gt;
-		Toggle Form
-	&lt;/button&gt;
-&lt;/div&gt;</pre>
-			<p>Or, you can use it inside your component much like <strong>Example 1</strong>:</p>
-			<pre>import Ember from 'ember';
-import GoogleAnalyticsComponent from 'ember-g-analytics/mixin/google-analytics-component';
-
-export default Ember.Component.extend(GoogleAnalyticsComponent, {
-	// ...	
-	actions: {
-		someActionHandler() {
-			this.send('sendEvent', 'My Category', 'click', 'My Label');
-		},
-	},
-});</pre>
-			<div class="alert alert-info">
-				Note: If you add the <code>sendEvent</code> action onto a non-ember anchor tag, you must add <code>preventDefault=false</code> as the final parameter of the action.
-			</div>
-    </div>
-  </div>
 </div>
-
 {{outlet}}

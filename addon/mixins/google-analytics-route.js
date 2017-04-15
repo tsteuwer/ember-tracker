@@ -1,5 +1,7 @@
 import Ember from 'ember';
 
+const loc = (window && window.location) || { pathname: '/' };
+
 /**
  * Turns a route name (e.g. "index" or "categories/category/index") to the actual url ("/" or "categories/category").
  * @public
@@ -42,10 +44,15 @@ export default Ember.Mixin.create({
 		didTransition() {
 			this._super(...arguments);
 
-			const page = routeNameToUrl(this.get('routeName')),
+			let page = loc.pathname,
 				title = this.get('title') || (document && document.title) || '';
 
-			this.beforeAnalyticsPageview();
+			const changes = this.beforeAnalyticsPageview();
+
+			if (changes) {
+				page = changes.page || page;
+				title = changes.title || title;
+			}
 			this.get('googleAnalytics').pageview(page, title);
 		},
 	},

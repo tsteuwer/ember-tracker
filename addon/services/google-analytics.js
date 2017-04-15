@@ -77,10 +77,11 @@ export default Ember.Service.extend({
 	 * @memberOf {GoogleAnalytics}
 	 * @param {String} network (e.g. Facebook, G+, Twitter)
 	 * @param {String} action (e.g. share, tweet)
-	 * @param {Number} url The url they are going to or are using.
+	 * @param {String} target Typically the url they are going to or are using.
+	 * @param {Object} fields
 	 * @return {undefined}
 	 */
-	social(network, action, url) {
+	social(network, action, target, fields) {
 		//jshint unused:false
 		this._send('network', ...arguments); 
 	},
@@ -92,9 +93,11 @@ export default Ember.Service.extend({
 	 * @param {String} category
 	 * @param {String} timingVar (e.g. "Ajax Response Time")
 	 * @param {Number} timingVal The number of milliseconds 
+	 * @param {String} label The label if needed
+	 * @param {Object} fields
 	 * @return {undefined}
 	 */
-	timing(category, timingVar, timingVal) {
+	timing(category, timingVar, timingVal, label, fields) {
 		//jshint unused:false
 		this._send('timing', ...arguments); 
 	},
