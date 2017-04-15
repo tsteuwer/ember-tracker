@@ -46,6 +46,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV.locationType = 'hash';
+    ENV.rootURL = '/ember-tracker/';
 		ENV.analyticsSettings = {
 			trackingId: 'UA-97028033-2',
 		};
