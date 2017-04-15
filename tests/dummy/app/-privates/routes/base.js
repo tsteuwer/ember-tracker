@@ -1,11 +1,7 @@
 import Ember from 'ember';
 
 const {
-	$,
 	on,
-	run: {
-		debounce,
-	},
 	testing,
 } = Ember;
 

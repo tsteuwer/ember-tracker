@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import BaseRoute from '../-privates/routes/base';
 
 export default BaseRoute.extend({
