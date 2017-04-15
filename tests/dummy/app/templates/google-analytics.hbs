@@ -13,18 +13,75 @@
 </ol>
 <hr>
 <h4>Tracking Routes</h4>
-<p>Import and add the mixin to any route you wish to track. For page titles, it will first look for a property on the route called <code>title</code>. If that doesn't exist, it will then look at the <code>window.document.title</code> property.</p>
-<pre>import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
+<p>First, open up your <code>router.js</code> file and add the <code>GoogleAnalyticsRoute</code> mixin like below:</p>
+<pre>import Ember from 'ember';
+import config from './config/environment';
+import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
 
-export default Ember.Route.extend(GoogleAnalyticsRoute, {
-	//...
-});</pre>
-<p>By default, the addon will send the <code>location.pathname</code> as the page URL. However, you can override this by adding a method on your route called <code>beforeAnalyticsPageview</code> which returns an object with either a <code>title</code> or <code>page</code> (or both) property and it will use that to set the page/title and send the event.
+const Router = Ember.Router.extend(GoogleAnalyticsRoute, {
+	location: config.locationType,
+	rootURL: config.rootURL
+});
+
+Router.map(function() {
+	// your routes
+});
+
+export default Router;
+</pre>
+<p>
+	Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Analytics account information.
 </p>
+<pre>module.exports = function(environment) {
+	// ...
+
+	ENV.analyticsSettings = {
+		trackingId: 'UA-########-#',
+	};
+
+	// ...</pre>
+<p>
+	<strong>That's it!</strong>
+</p>
+<p>
+	<div class="alert alert-warning">
+		<strong>NOTE</strong>
+		<p>
+			I encourage you to setup "dev" and "staging" tracking IDs in your Google Analytics account so that you do not touch production data. Use the <code>environment</code> variable in your config file to set these up.
+		</p>
+	</div>
+</p>
+<p>
+	By default, the addon will:
+	<ul>
+		<li>grab the current <code>Route</code> look for a <code>title</code> property. If that doesn't exsist, it will use the <code>document.title</code>.</li>
+		<li>use <code>location.pathname</code> as the URL.</li>
+	</ul>
+</p>
+<p>
+	To override any of the above, you can provide a method on your Route called <code>beforeGoogleAnalytics</code> that will return an object with either a <code>title</code>, <code>page</code>, or both, and it will use those instead.
+</p>
+<p>
+Lets say you want all page views for <code>/member/123</code> (or <code>/member/*</code> for that matter), to be sent as <code>/member</code> since the <code>:memberId</code> might be private. All you have to do is:
+</p>
+<pre>import Ember from 'ember';
+
+export default Ember.Route.extend({
+	beforeGoogleAnalytics() {
+		return {
+			title: 'Member Profile',
+			page: '/member',
+		};
+	},
+	// ...
+});
+</pre>
 <hr>
 <h4>Tracking Events</h4>
-<p><strong>Example #1</strong></p>
-<p>Events are very simple and there are two ways of handling them. The first is the inject the service and call the <code>event</code>, <code>timing</code>, or <code>social</code> methods.</p>
+<p><strong>Example</strong></p>
+<p>
+	Events are very simple. The first thing you must do is the inject the service. From then on, you can call any of the following methods: <code>event</code>, <code>timing</code>, or <code>social</code>. 
+</p>
 <pre>import Ember from 'ember';
 
 export default Ember.Component.extend({
@@ -35,50 +92,20 @@ export default Ember.Component.extend({
 			this.toggleProperty('showing');
 			this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
 		},
-		tweetThis() {
+		trackTweet() {
 			//...
 			this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
+		},
+		trackTiming() {
+			var start = Date.now();
+			this.get('ajax')
+				.then(this.get('onResolve'), this.get('onReject'))
+				.finally(() => {
+					this.get('googleAnalytics).timing('Ajax Speed', Date.now() - start, 'My Component Speed');
+				});
 		},
 		//...
 	},
 });
 </pre>
-<div class="alert alert-info">
-	Note: You're only required to have a category and event type (e.g. 'click'). Additionally, you can inject the service into anything you want, say a controller or route.
-</div>
-<strong>Example #2</strong>
-<p>The second way of handling events is by including the mixin into your components. This only includes the <code>event</code> method.</p>
-<pre>import Ember from 'ember';
-import GoogleAnalyticsComponent from 'ember-tracker/mixin/google-analytics-component';
-
-export default Ember.Component.extend(GoogleAnalyticsComponent, {
-// ...
-});</pre>
-<p>Once you've included the mixin, you now have access to several actions.</p>
-<pre>&lt;div class="row"&gt;
-	&lt;button &#123;&#123;action "sendEvent" "My Category" "Toggle Form State"&#125;&#125;&gt;
-		Toggle Form
-	&lt;/button&gt;
-&lt;/div&gt;
-&lt;div class="row"&gt;
-	&lt;div &#123;&#123;action "sendEvent" "My Category" "I hovered" on="hover"&#125;&#125;&gt;
-		Hover over me	
-	&lt;/div&gt;
-&lt;/div&gt;
-</pre>
-<p>Or, you can use it inside your component much like <strong>Example 1</strong>:</p>
-<pre>import Ember from 'ember';
-import GoogleAnalyticsComponent from 'ember-tracker/mixin/google-analytics-component';
-
-export default Ember.Component.extend(GoogleAnalyticsComponent, {
-	// ...	
-	actions: {
-		someActionHandler() {
-			this.send('sendEvent', 'My Category', 'click', 'My Label');
-		},
-	},
-});</pre>
-<div class="alert alert-info">
-	Note: If you add the <code>sendEvent</code> action onto a non-ember anchor tag, you must add <code>preventDefault=false</code> as the final parameter of the action.
-</div>
 {{outlet}}

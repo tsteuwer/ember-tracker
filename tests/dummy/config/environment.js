@@ -20,7 +20,10 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
+		analyticsSettings: {
+			trackingId: 'UA-97028033-2',
+		},
   };
 
   if (environment === 'development') {
@@ -29,9 +32,6 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-		ENV.analyticsSettings = {
-			trackingId: 'UA-97028033-2',
-		};
   }
 
   if (environment === 'test') {

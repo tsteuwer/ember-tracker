@@ -2,58 +2,36 @@ import Ember from 'ember';
 
 const loc = (window && window.location) || { pathname: '/' };
 
-/**
- * Turns a route name (e.g. "index" or "categories/category/index") to the actual url ("/" or "categories/category").
- * @public
- * @type {Function}
- * @param {String} route
- * @return {String}
- */
-export function routeNameToUrl(route) {
-	if (route === 'index') {
-		return '/';
-	}
-
-	return route
-		.split('.')
-		.filter(route => route !== 'index')
-		.join('/');
-};
-
 export default Ember.Mixin.create({
 	/**
 	 * Add the Google Analytics services to each route so it's available.
 	 * @public
 	 * @type {Service.GoogleAnalytics}
 	 */
-	googleAnalytics: Ember.inject.service('google-analytics'),
+	_ga: Ember.inject.service('google-analytics'),
 	
 	/**
-	 * Allow people to set/change things before the service is called.
+	 * Watches the didTransition event so we can update analytics.
 	 * @public
 	 * @type {Function}
 	 */
-	beforeAnalyticsPageview: function(){},
+	_emberTrackerPageView: Ember.on('didTransition', function() {
+		const routeName = this.get('currentRouteName'),
+			route = Ember.getOwner(this).lookup(`route:${routeName}`),
+			ga = this.get('_ga');
 
-	actions: {
-		/**
-		 * Add our own didTransition to the actions so we can set a new pageview when it changes to this route.
-		 * @public
-		 * @type {Function}
-		 */
-		didTransition() {
-			this._super(...arguments);
+		let page = loc.pathname,
+			title = route.get('title') || (document && document.title) || '';
 
-			let page = loc.pathname,
-				title = this.get('title') || (document && document.title) || '';
-
-			const changes = this.beforeAnalyticsPageview();
+		if (Ember.typeOf(route.beforeAnalyticsPageview) === 'function') {
+		 const changes = this.beforeAnalyticsPageview(ga);
 
 			if (changes) {
 				page = changes.page || page;
 				title = changes.title || title;
 			}
-			this.get('googleAnalytics').pageview(page, title);
-		},
-	},
+		}
+
+		ga.pageview(page, title);
+	}),
 });
