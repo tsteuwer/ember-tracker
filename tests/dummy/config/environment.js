@@ -20,7 +20,10 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
+		analyticsSettings: {
+			trackingId: 'UA-97028033-2',
+		},
   };
 
   if (environment === 'development') {
@@ -43,7 +46,11 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    ENV.locationType = 'hash';
+    ENV.rootURL = '/ember-tracker/';
+		ENV.analyticsSettings = {
+			trackingId: 'UA-97028033-2',
+		};
   }
 
   return ENV;

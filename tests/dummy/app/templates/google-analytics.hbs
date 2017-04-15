@@ -1,0 +1,111 @@
+<h3>Google Analytics</h3>
+<hr>
+<h4>API</h4>
+<p>With the Google Analytics service, you have access to four methods.</p>
+<ol>
+	<li><code>event(category:String, action:String, label:String, value:Number: fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/events">Documentation</a></li>
+	<li><code>pageview(page:String, title:String)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/pages">Documentation</a></li>
+	<ul>
+		<li>Note: <code>page</code> is used to <code>ga('set', 'page', page)</code> so that all other methods get sent under the correct route.</li>
+	</ul>
+	<li><code>social(network:String, action:String, target:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/social-interactions">Documentation</a></li>
+	<li><code>timing(category:String, timingVar:String, timingVar:Number, timingLabel:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings">Documentation</a></li>
+</ol>
+<hr>
+<h4>Tracking Routes</h4>
+<p>First, open up your <code>router.js</code> file and add the <code>GoogleAnalyticsRoute</code> mixin like below:</p>
+<pre>import Ember from 'ember';
+import config from './config/environment';
+import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
+
+const Router = Ember.Router.extend(GoogleAnalyticsRoute, {
+	location: config.locationType,
+	rootURL: config.rootURL
+});
+
+Router.map(function() {
+	// your routes
+});
+
+export default Router;
+</pre>
+<p>
+	Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Analytics account information.
+</p>
+<pre>module.exports = function(environment) {
+	// ...
+
+	ENV.analyticsSettings = {
+		trackingId: 'UA-########-#',
+	};
+
+	// ...</pre>
+<p>
+	<strong>That's it!</strong>
+</p>
+<p>
+	<div class="alert alert-warning">
+		<strong>NOTE</strong>
+		<p>
+			I encourage you to setup "dev" and "staging" tracking IDs in your Google Analytics account so that you do not touch production data. Use the <code>environment</code> variable in your config file to set these up.
+		</p>
+	</div>
+</p>
+<p>
+	By default, the addon will:
+	<ul>
+		<li>grab the current <code>Route</code> look for a <code>title</code> property. If that doesn't exsist, it will use the <code>document.title</code>.</li>
+		<li>use <code>location.pathname</code> as the URL.</li>
+	</ul>
+</p>
+<p>
+	To override any of the above, you can provide a method on your Route called <code>beforeGoogleAnalytics</code> that will return an object with either a <code>title</code>, <code>page</code>, or both, and it will use those instead.
+</p>
+<p>
+Lets say you want all page views for <code>/member/123</code> (or <code>/member/*</code> for that matter), to be sent as <code>/member</code> since the <code>:memberId</code> might be private. All you have to do is:
+</p>
+<pre>import Ember from 'ember';
+
+export default Ember.Route.extend({
+	beforeGoogleAnalytics() {
+		return {
+			title: 'Member Profile',
+			page: '/member',
+		};
+	},
+	// ...
+});
+</pre>
+<hr>
+<h4>Tracking Events</h4>
+<p><strong>Example</strong></p>
+<p>
+	Events are very simple. The first thing you must do is the inject the service. From then on, you can call any of the following methods: <code>event</code>, <code>timing</code>, or <code>social</code>. 
+</p>
+<pre>import Ember from 'ember';
+
+export default Ember.Component.extend({
+	googleAnalytics: Ember.inject.service(),
+	// ...
+	actions: {
+		toggleFormState() {
+			this.toggleProperty('showing');
+			this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
+		},
+		trackTweet() {
+			//...
+			this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
+		},
+		trackTiming() {
+			var start = Date.now();
+			this.get('ajax')
+				.then(this.get('onResolve'), this.get('onReject'))
+				.finally(() => {
+					this.get('googleAnalytics).timing('Ajax Speed', Date.now() - start, 'My Component Speed');
+				});
+		},
+		//...
+	},
+});
+</pre>
+{{outlet}}

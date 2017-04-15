@@ -1,5 +1,18 @@
-{{!-- The following component displays Ember's default welcome message. --}}
-{{welcome-page}}
-{{!-- Feel free to remove this! --}}
-
-{{outlet}}
+<div class="container">
+  <div class="pull-right badges">
+    <a class="top-badge" href={{model.npmLink}}>
+      <img src={{model.npmBadge}} />
+    </a>
+    <a class="top-badge" href={{model.travisLink}}>
+      <img src={{model.travisBadge}} />
+    </a>
+    <a class="top-badge github-logo" href={{model.githubLink}}>
+      <img width="32px" height="32px" src="/images/GitHub-Mark-32px.png" />
+    </a>
+  </div>
+	<h1>{{#link-to "index"}}Ember Tracker{{/link-to}}</h1>
+	{{outlet}}
+</div>
+<footer>
+	Created with &hearts; by <a href="https://github.com/tsteuwer">Troy Steuwer</a>
+</footer>

@@ -1,0 +1,67 @@
+<h3>Tealium IQ</h3>
+<hr>
+<h4>API</h4>
+<p>With the <code>TealiumRoute</code> mixin, you can add <a href="https://tealiumiq.com">Tealium IQ</a> effortlessly to your routes.</p>
+<h4>Tracking Routes</h4>
+<p>First, open up your <code>router.js</code> file and add the <code>TealiumRoute</code> mixin like below:</p>
+<pre>import Ember from 'ember';
+import config from './config/environment';
+import TealiumRoute from 'ember-tracker/mixins/tealium-route';
+
+const Router = Ember.Router.extend(TealiumRoute, {
+	location: config.locationType,
+	rootURL: config.rootURL
+});
+
+Router.map(function() {
+	// your routes
+});
+
+export default Router;
+</pre>
+<p>
+	Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Tealium account name information.
+</p>
+<pre>module.exports = function(environment) {
+	// ...
+
+	ENV.analyticsSettings = {
+		accountName: 'mybiz',
+	};
+
+	// ...</pre>
+<p>
+	Finally, you need to add a method on your routes called <code>getTealiumView</code>. This will be all the data you need to send that you would normally put in the <code>utag_data</code> object. For example:
+</p>
+<pre>import Ember from 'ember';
+
+export default Ember.Route.extend({
+	// ...
+	getTealiumView() {
+		return {
+			customerId: this.get('memberService.id'),
+			order_currency: this.get('order.currency'),
+			page_type: 'checkout',
+		};
+	},
+	// ...
+});</pre>
+<div class="alert alert-warning">
+	By default, we add the following properties to the object:
+	<ul>
+		<li>
+			<code>customerId</code>: <code>null</code>
+		</li>
+		<li>
+			<code>domain</code>: we retrieve this from <code>location.hostname</code>
+		</li>
+		<li>
+			<code>order_currency</code>: USD
+		</li>
+		<li>
+			<code>page_type</code>: home
+		</li>
+	</ul>
+	Anything you pass back from <code>getTealiumView</code> will overwrite these properties.
+</div>
+{{outlet}}
