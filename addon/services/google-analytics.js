@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["warn", "log"] }] */
+/*eslint no-unused-vars: 0 */
 import Ember from 'ember';
 
 const {
@@ -52,7 +54,6 @@ export default Ember.Service.extend({
 		this._super(...arguments);
 		let ga = window && window.ga;
 
-
 		if (!ga) {
 			console.warn('`window.ga` has not been set');
 			ga = () => {};
@@ -79,7 +80,6 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	event(category, action, label, value, fields) {
-		//jshint unused:false
 		this._send('event', ...arguments); 
 	},
 
@@ -94,7 +94,6 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	social(network, action, target, fields) {
-		//jshint unused:false
 		this._send('network', ...arguments); 
 	},
 
@@ -110,7 +109,6 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	timing(category, timingVar, timingVal, label, fields) {
-		//jshint unused:false
 		this._send('timing', ...arguments); 
 	},
 
