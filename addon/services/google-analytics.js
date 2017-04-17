@@ -1,11 +1,17 @@
 import Ember from 'ember';
 
 const {
+	assert,
 	computed: {
 		alias,
 		bool,
 	},
+	get,
+	getOwner,
+	testing,
 } = Ember;
+
+const EVENTS = ['event', 'network', 'timing'];
 
 export default Ember.Service.extend({
 	/**
@@ -28,7 +34,7 @@ export default Ember.Service.extend({
 
 	/**
 	 * The raw window.ga object.
-	 * @public
+	 * @private
 	 * @computed
 	 * @memberOf {GoogleAnalytics}
 	 * @type {Object}
@@ -36,7 +42,7 @@ export default Ember.Service.extend({
 	_ga: null,
 
 	/**
-	 * Grabs the GA object.
+	 * Grabs the GA object and sets our settings.
 	 * @public
 	 * @overrides
 	 * @memberOf {GoogleAnalytics}
@@ -44,15 +50,21 @@ export default Ember.Service.extend({
 	 */
 	init() {
 		this._super(...arguments);
-		const ga = window && window.ga;
+		let ga = window && window.ga;
 
-		Ember.assert(ga, '`window.ga` has not been set');
 
-		if (ga) {
-			this.set('_ga', ga);
-		} else {
-			this.set('_ga', () => {});
+		if (!ga) {
+			console.warn('`window.ga` has not been set');
+			ga = () => {};
 		}
+
+		const config = getOwner(this).resolveRegistration('config:environment');
+
+		this.setProperties({
+			_logAnalyticsPageViews: get(config, 'emberTracker.LOG_PAGEVIEW'),
+			_logAnalyticsEvents: get(config, 'emberTracker.LOG_EVENTS'),
+			_ga: ga
+		});
 	},
 
 	/**
@@ -113,16 +125,54 @@ export default Ember.Service.extend({
 	pageview(page, title) {
 		const ga = this.get('_ga');
 
+		assert(page, 'page should be a valid string');
+		assert(title, 'page title should be a valid string');
+
 		ga('set', 'page', page);
 		ga('send', 'pageview', {
 			page,
 			title,
 		});
+
+		this.log('pageview', page, title);
+	},
+
+	/**
+	 * Checks if we should log to the console or not..
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @param {String} type
+	 * @rest {Mixed} args
+	 * @return {undefined}
+	 */
+	log(type, ...args) {
+		if (testing) {
+			return;
+		}
+
+		if (type === 'pageview' && this.get('_logAnalyticsPageViews')) {
+			this._log(type, args);
+		} else if (EVENTS.indexOf(type) > -1 && this.get('_logAnalyticsEvents')) {
+			this._log(type, args);
+		}
+	},
+
+	/**
+	 * Logs to the console.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @param {String} type
+	 * @param {Mixed} args
+	 * @return {undefined}
+	 */
+	_log(type, args) {
+		console.log(`[EmberTracker] Google Analytics ${type} sent:`, args);
 	},
 
 	/**
 	 * Hooks into the send command with the GA object.
 	 * @private
+	 * @memberOf {GoogleAnalytics}
 	 * @param {String} type The type of event being sent. E.g. 'event', 'timing', 'network'.
 	 * @param {Mixed} The rest of the params must match the API for googles 'send' in order.
 	 * @usage
@@ -131,8 +181,10 @@ export default Ember.Service.extend({
 	 *		ga('send', 'event', 'My Category', 'click', 'Cats', null, { nonInteractive: true});
 	 * @return {undefined}
 	 */
-	_send() {
+	_send(...args) {
 		const ga = this.get('_ga');
-		ga.apply(ga, ['send', ...arguments]);
+		ga.apply(ga, ['send'].concat(args));
+
+		this.log.apply(this, args);
 	}
 });

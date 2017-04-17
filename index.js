@@ -17,7 +17,7 @@ module.exports = {
 
 		if (type === 'body') {
 			content += this.addTealiumIQ(envConfig.tealiumSettings, env);
-			content += this.addGoogleAnalytics(envConfig.analyticsSettings);
+			content += this.addGoogleAnalytics(envConfig.emberTracker);
 		}
 
 		return content;

@@ -21,12 +21,16 @@ module.exports = function(environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-		analyticsSettings: {
+		emberTracker: {
 			trackingId: 'UA-97028033-2',
+			LOG_PAGEVIEW: true,
+			LOG_EVENTS: true,
 		},
   };
 
   if (environment === 'development') {
+		ENV.emberTracker.LOG_PAGEVIEW = true;
+		ENV.emberTracker.LOG_EVENTS = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -39,8 +43,8 @@ module.exports = function(environment) {
     ENV.locationType = 'none';
 
     // keep test console output quieter
-    ENV.APP.LOG_ACTIVE_GENERATION = false;
-    ENV.APP.LOG_VIEW_LOOKUPS = false;
+    //ENV.APP.LOG_ACTIVE_GENERATION = false;
+    //ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
   }
@@ -48,9 +52,6 @@ module.exports = function(environment) {
   if (environment === 'production') {
     ENV.locationType = 'hash';
     ENV.rootURL = '/ember-tracker/';
-		ENV.analyticsSettings = {
-			trackingId: 'UA-97028033-2',
-		};
   }
 
   return ENV;
