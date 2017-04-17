@@ -1,6 +1,12 @@
 # ember-analytics
 
-This README outlines the details of collaborating on this Ember addon.
+For more information about this addon, please visit the [Ember Tracker website](https://tsteuwer.github.io/ember-tracker).
+
+## Minimum Requirements
+
+* Ember 2.3+
+* Ember CLI
+
 
 ## Installation
 

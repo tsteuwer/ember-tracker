@@ -16,8 +16,8 @@ module.exports = {
 		let content = '';
 
 		if (type === 'body') {
-			content += this.addTealiumIQ(envConfig.tealiumSettings, env);
-			content += this.addGoogleAnalytics(envConfig.emberTracker);
+			content += this.addTealiumIQ(envConfig, env);
+			content += this.addGoogleAnalytics(envConfig, env);
 		}
 
 		return content;
@@ -29,14 +29,16 @@ module.exports = {
 	 * @param {Object} settings
 	 * @return {String}
 	 */
-	addGoogleAnalytics(settings) {
-		if (!settings || !settings.trackingId) {
+	addGoogleAnalytics(settings, env) {
+		const trackingId = get(settings, 'emberTracker.analyticsSettings.trackingId');
+
+		if (env === 'test' || !trackingId) {
 			return '';
 		}
 
-		this.ui.writeLine(`Including Google Analytics (${settings.trackingId})`);
+		this.ui.writeLine(`Including Google Analytics (${trackingId})`);
 
-		return `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${settings.trackingId}','auto');</script>`;
+		return `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${trackingId}','auto');</script>`;
 	},
 
 	/**
@@ -46,7 +48,9 @@ module.exports = {
 	 * @return {String}
 	 */
 	addTealiumIQ(settings, env) {
-		if (!settings || !settings.accountName) {
+		const accountName = get(settings, 'emberTracker.tealiumSettings.accountName');
+
+		if (env === 'test' || !accountName) {
 			return '';
 		}
 
@@ -56,17 +60,34 @@ module.exports = {
 			case 'development':
 				tealiumEnv = 'dev';
 				break;
-			case 'staging':
-				tealiumEnv = 'qa';
+			case 'production':
+				tealiumEnv = 'prod';
 				break;
 			default:
-				tealiumEnv = 'prod';
+				tealiumEnv = 'qa';
 				break;
 		}
 
-		this.ui.writeLine(`Including Tealium IQ (${settings.accountName} for ${tealiumEnv})`);
+		this.ui.writeLine(`Including Tealium IQ (${accountName} for ${tealiumEnv})`);
 
-		return `<script>window.utag_cfg_ovrd={noview:true};(function(a,b,c,d){a='//tags.tiqcdn.com/utag/${settings.accountName}/main/${tealiumEnv}/utag.js';b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);})();</script>`;
+		return `<script>window.utag_cfg_ovrd={noview:true};(function(a,b,c,d){a='//tags.tiqcdn.com/utag/${accountName}/main/${tealiumEnv}/utag.js';b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);})();</script>`;
 	},
-
 };
+
+function get(obj, keys) {
+	if (!obj) {
+		return null;
+	}
+
+	const parts = keys.split('.');
+
+	if (obj[parts[0]] === 'undefined') {
+		return null;
+	}
+
+	if (parts.length === 1) {
+		return obj[parts[0]];
+	}
+
+	return get(obj[parts.shift()], parts.join('.'));
+}

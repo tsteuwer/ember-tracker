@@ -22,9 +22,11 @@ module.exports = function(environment) {
       // when it is created
     },
 		emberTracker: {
-			trackingId: 'UA-97028033-2',
-			LOG_PAGEVIEW: true,
-			LOG_EVENTS: true,
+			analyticsSettings: {
+				trackingId: 'UA-97028033-2',
+				LOG_PAGEVIEW: true,
+				LOG_EVENTS: true,
+			},
 		},
   };
 

@@ -52,18 +52,19 @@ export default Ember.Service.extend({
 	 */
 	init() {
 		this._super(...arguments);
-		let ga = window && window.ga;
+		let ga = (window || {}).ga;
+
+		assert(ga, '`window.ga` has not been set');
 
 		if (!ga) {
-			console.warn('`window.ga` has not been set');
 			ga = () => {};
 		}
 
-		const config = getOwner(this).resolveRegistration('config:environment');
+		const config = getOwner(this).resolveRegistration('config:environment') || {};
 
 		this.setProperties({
-			_logAnalyticsPageViews: get(config, 'emberTracker.LOG_PAGEVIEW'),
-			_logAnalyticsEvents: get(config, 'emberTracker.LOG_EVENTS'),
+			_logAnalyticsPageViews: get(config, 'emberTracker.analyticsSettings.LOG_PAGEVIEW'),
+			_logAnalyticsEvents: get(config, 'emberTracker.analyticsSettings.LOG_EVENTS'),
 			_ga: ga
 		});
 	},
