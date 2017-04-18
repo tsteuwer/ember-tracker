@@ -1,4 +1,4 @@
-# ember-analytics
+# ember-tracker
 
 For more information about this addon, please visit the [Ember Tracker website](https://tsteuwer.github.io/ember-tracker).
 
@@ -13,7 +13,7 @@ For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-analytics`
+* `cd ember-tracker`
 * `npm install`
 * `bower install`
 
