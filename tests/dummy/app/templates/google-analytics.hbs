@@ -35,7 +35,7 @@ export default Router;
 <pre>module.exports = function(environment) {
 	// ...
 
-	ENV.analyticsSettings = {
+	ENV.emberTracker = {
 		trackingId: 'UA-########-#',
 	};
 
@@ -108,4 +108,22 @@ export default Ember.Component.extend({
 	},
 });
 </pre>
+<hr>
+<h4>For Development &amp; Testing</h4>
+<p>
+	<button class="btn" {{action "sendEvent"}}>
+		Test Event
+	</button>
+	<button class="btn" {{action "sendTiming"}}>
+		Test Timing
+	</button>
+	<button class="btn" {{action "sendSocial"}}>
+		Test Social
+	</button>
+	<p>
+		{{#link-to "google-analytics.test-nested-route"}}Test Nested Route{{/link-to}} | 
+		{{#link-to "google-analytics.test-with-slug" "some kind of slug"}}Test Slug Route{{/link-to}} | 
+		{{#link-to "google-analytics.test-with-id" 123}}Test ID Route{{/link-to}}
+	</p>
+</p>
 {{outlet}}

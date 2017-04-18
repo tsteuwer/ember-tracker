@@ -1,6 +1,14 @@
 # ember-analytics
 
-This README outlines the details of collaborating on this Ember addon.
+For more information about this addon, please visit the [Ember Tracker website](https://tsteuwer.github.io/ember-tracker).
+
+## Minimum Requirements
+
+* Ember 2.3+
+* Ember CLI
+
+For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill](https://github.com/rwjblue/ember-getowner-polyfill) addon.
+
 
 ## Installation
 
