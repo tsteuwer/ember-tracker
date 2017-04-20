@@ -33,26 +33,25 @@ After you've installed the addon, open your config file located in `config/envir
 
 ```
 [...]
-
 module.exports = function(environment) {
- var ENV = {
-
+	var ENV = {
 		[...]
-    APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
-    },
-    emberTracker: {
-      analyticsSettings: {
-        trackingId: 'UA-########-#',
-      },
-    },
-  };
-
+		APP: {
+			// Here you can pass flags/options to your application instance
+			// when it is created
+		},
+		emberTracker: {
+			analyticsSettings: {
+				trackingId: 'UA-########-#',
+			},
+		},
+	};
 [...]
 ```
 
 Feel free to change your `trackingId` based on the environment you're in.
+
+Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking pageviews and inject the service into your controllers/components. [Learn how](https://tsteuwer.github.io/ember-tracker/#/google-analytics)!
 
 ### Options
 
@@ -69,25 +68,25 @@ To allow Tealium, simply open the `config/environment.js` file and add a new obj
 
 ```
 [...]
-
 module.exports = function(environment) {
- var ENV = {
-
+	var ENV = {
 		[...]
-    APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
-    },
-    emberTracker: {
-      tealiumSettings: {
-        accountName: 'joeshmoewebsite',
-      },
-    },
-  };
+		APP: {
+			// Here you can pass flags/options to your application instance
+			// when it is created
+		},
+		emberTracker: {
+			tealiumSettings: {
+				accountName: 'myAccName',
+			},
+		},
+	};
 [...]
 ```
 
 That's it! The addon will take care of using the dev, qa or production environments for you. For reference, it determines which environment to use in Tealium based on the following conditions:
+
+You're now ready to add the TealiumRoute mixin to your Router to start updating Tealium on new routes. [Learn how here](https://tsteuwer.github.io/ember-tracker/#/tealium)!
 
 Ember Environment | Tealium Environment
 ----------------- | -------------------
