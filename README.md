@@ -2,13 +2,14 @@
 
 The simple way of tracking your app or addon using:
 
-* [Google Analytics](https://developers.google.com/analytics/devguides/collection/analyticsjs/) using `analytics.js`.
-** [x] Pageviews - Every transition will be captured and sent as a page view!
-** [x] Events - Track what your users are doing by using the `events` events API.
-** [x] User Timing - Gague performance with the `timing` API.
-** [x] Social - Track shares, tweets, etc with the `social` (network) API.
-* [Tealium IQ](http://tealium.com/products/tealium-iq-tag-management-system/) tag manager
-** [x] Support for dev, qa and production environments out-of-the-box.
+[Google Analytics](https://developers.google.com/analytics/devguides/collection/analyticsjs/) using `analytics.js`.
+- [x] Pageviews - Every transition will be captured and sent as a page view!
+- [x] Events - Track what your users are doing by using the `events` events API.
+- [x] User Timing - Gague performance with the `timing` API.
+- [x] Social - Track shares, tweets, etc with the `social` (network) API.
+
+[Tealium IQ](http://tealium.com/products/tealium-iq-tag-management-system/) tag manager
+- [x] Support for dev, qa and production environments out-of-the-box.
 
 For more information about this addon, please visit the [Ember Tracker website](https://tsteuwer.github.io/ember-tracker).
 
@@ -86,7 +87,7 @@ module.exports = function(environment) {
 
 That's it! The addon will take care of using the dev, qa or production environments for you. For reference, it determines which environment to use in Tealium based on the following conditions:
 
-You're now ready to add the TealiumRoute mixin to your Router to start updating Tealium on new routes. [Learn how here](https://tsteuwer.github.io/ember-tracker/#/tealium)!
+You're now ready to add the TealiumRoute mixin to your Router to start updating Tealium on new routes. [Learn how](https://tsteuwer.github.io/ember-tracker/#/tealium)!
 
 Ember Environment | Tealium Environment
 ----------------- | -------------------
