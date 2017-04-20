@@ -7,6 +7,7 @@ The simple way of tracking your app or addon using:
 - [x] Events - Track what your users are doing by using the `events` events API.
 - [x] User Timing - Gague performance with the `timing` API.
 - [x] Social - Track shares, tweets, etc with the `social` (network) API.
+- [x] Custom page/titles and "before analytics" callback.
 
 [Tealium IQ](http://tealium.com/products/tealium-iq-tag-management-system/) tag manager
 - [x] Support for dev, qa and production environments out-of-the-box.
