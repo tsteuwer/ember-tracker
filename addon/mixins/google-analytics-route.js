@@ -17,38 +17,40 @@ export default Ember.Mixin.create({
 	/**
 	 * Watches the didTransition event so we can update analytics.
 	 * @public
+	 * @observes {didTransition}
 	 * @memberOf {GoogleAnalyticsRoute}
 	 * @type {Function}
 	 */
-	_emberTrackerPageView: Ember.on('didTransition', handlePageView),
-});
+	_etPageView: Ember.on('didTransition', function() {
+		const routeName = this.get('currentRouteName'),
+			route = this._etGetCurrentRoute(routeName),
+			ga = this.get('_ga');
 
-/**
- * Observes and sends our page view anytime a route transitions.
- * @public
- * @memberOf {GoogleAnalyticsRoute}
- * @return {undefined}
- */
-function handlePageView() {
-	const owner = getOwner(this),
-		routeName = this.get('currentRouteName'),
-		route = owner.lookup(`route:${routeName}`),
-		ga = this.get('_ga');
+		let page = this.get('url'),
+			title = getTitle(route);
 
-	let page = this.get('url'),
-		title = getTitle(route);
+		if (typeOf(route.beforeAnalyticsPageview) === 'function') {
+			const changes = route.beforeAnalyticsPageview(ga);
 
-	if (typeOf(route.beforeAnalyticsPageview) === 'function') {
-		const changes = route.beforeAnalyticsPageview(ga);
-
-		if (changes) {
-			page = changes.page || page;
-			title = changes.title || title;
+			if (changes) {
+				page = changes.page || page;
+				title = changes.title || title;
+			}
 		}
-	}
 
-	ga.pageview(page, title);
-}
+		ga.pageview(page, title);
+	}),
+	
+	/**
+	 * Returns the route required.
+	 * @private
+	 * @memberOf {GoogleAnalyticsRoute}
+	 * @return {Route}
+	 */
+	_etGetCurrentRoute(routeName) {
+		return getOwner(this).lookup(`route:${routeName}`);
+	},
+});
 
 /**
  * Returns the page title either by looking at the route or grabbing it from the dom.
