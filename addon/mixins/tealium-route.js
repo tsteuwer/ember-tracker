@@ -5,6 +5,8 @@ const {
 	getWithDefault,
 } = Ember;
 
+const assign = Ember.assign || Ember.merge;
+
 export const DEFAULT_VIEW = {
 	customerId: null,
 	domain: getWithDefault((window || {}), 'location.hostname', ''),
@@ -83,10 +85,10 @@ export default Ember.Mixin.create({
 
 		Ember.assert(hasTealiumFn, `${routeName} route doesn't have a "getTealiumView" function`);
 
-		let currView = currView = Ember.assign({}, DEFAULT_VIEW);
+		let currView = currView = assign({}, DEFAULT_VIEW);
 
 		if (hasTealiumFn) {
-			currView = Ember.assign(currView, route.getTealiumView());
+			currView = assign(currView, route.getTealiumView());
 		}
 
 		if (utag) {

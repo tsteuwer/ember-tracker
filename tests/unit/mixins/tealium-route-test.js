@@ -4,8 +4,9 @@ import { module, test } from 'qunit';
 
 const {
 	Evented,
-	assign,
 } = Ember;
+
+const assign = Ember.assign || Ember.merge;
 
 module('Unit | Mixin | tealium route');
 
