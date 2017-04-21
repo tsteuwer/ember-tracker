@@ -1,7 +1,11 @@
 import Ember from 'ember';
+import { getCurrentRoute } from 'ember-tracker/-privates/utils';
 
 const {
-	getOwner,
+	inject: {
+		service,
+	},
+	on,
 	typeOf,
 } = Ember;
 
@@ -12,7 +16,7 @@ export default Ember.Mixin.create({
 	 * @memberOf {GoogleAnalyticsRoute}
 	 * @type {Service.GoogleAnalytics}
 	 */
-	_ga: Ember.inject.service('google-analytics'),
+	_ga: service('google-analytics'),
 	
 	/**
 	 * Watches the didTransition event so we can update analytics.
@@ -21,7 +25,7 @@ export default Ember.Mixin.create({
 	 * @memberOf {GoogleAnalyticsRoute}
 	 * @type {Function}
 	 */
-	_etPageView: Ember.on('didTransition', function() {
+	_etPageView: on('didTransition', function() {
 		const routeName = this.get('currentRouteName'),
 			route = this._etGetCurrentRoute(routeName),
 			ga = this.get('_ga');
@@ -48,7 +52,7 @@ export default Ember.Mixin.create({
 	 * @return {Route}
 	 */
 	_etGetCurrentRoute(routeName) {
-		return getOwner(this).lookup(`route:${routeName}`);
+		return getCurrentRoute(this, routeName);
 	},
 });
 
