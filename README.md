@@ -22,6 +22,7 @@ For more information about this addon, please visit the [Ember Tracker website][
 
 * Ember 2.3+
 * Ember CLI
+* IE9+ (When using the Tealium mixin with the `onload` setting.
 
 For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill][getowner-poly-url] addon.
 
@@ -89,6 +90,15 @@ module.exports = function(environment) {
 	};
 [...]
 ```
+
+### Options
+
+There is one option available for Tealium you may wish to use in your `environment.js` file. It is:
+
+* `onload` (boolean) - Loads Tealium after the `window.onload` event fires. It uses `addEventListener` which requires />= IE9.
+
+
+### Notes
 
 That's it! The addon will take care of using the dev, qa or production environments for you. For reference, it determines which environment to use in Tealium based on the following conditions:
 
