@@ -1,11 +1,9 @@
 import Ember from 'ember';
-import { getCurrentRoute } from 'ember-tracker/-privates/utils';
+import { getCurrentRoute, mergeObjects } from 'ember-tracker/-privates/utils';
 
 const {
 	getWithDefault,
 } = Ember;
-
-const assign = Ember.assign || Ember.merge;
 
 export const DEFAULT_VIEW = {
 	customerId: null,
@@ -81,14 +79,15 @@ export default Ember.Mixin.create({
 		const routeName = this.get('currentRouteName'),
 			route = this._etGetCurrentRoute(routeName),
 			hasTealiumFn = typeOf(route.getTealiumView) === 'function',
-			utag = this.get('_tealium');
+			utag = this.get('_tealium'),
+			currView = {};
 
 		Ember.assert(hasTealiumFn, `${routeName} route doesn't have a "getTealiumView" function`);
 
-		let currView = currView = assign({}, DEFAULT_VIEW);
+		mergeObjects(currView, DEFAULT_VIEW);
 
 		if (hasTealiumFn) {
-			currView = assign(currView, route.getTealiumView());
+			mergeObjects(currView, route.getTealiumView());
 		}
 
 		if (utag) {

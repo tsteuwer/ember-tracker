@@ -63,10 +63,12 @@ test('didTransition should merge DEFAULT_VIEW and object that comes back from ge
 
 	subject.trigger('didTransition');
 
-	const view = assign({}, DEFAULT_VIEW, {
-			order_currency: 'CAD',
-			page_type: 'list',
-			new_param: 'yep',
+	const view = {};
+	assign(view, DEFAULT_VIEW);
+	assign(view, {
+		order_currency: 'CAD',
+		page_type: 'list',
+		new_param: 'yep',
 	});
 
 	assert.deepEqual(subject.get('_etLastView'), view, 'they should be merged');
