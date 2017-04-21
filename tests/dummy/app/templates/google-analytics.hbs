@@ -12,6 +12,42 @@
 	<li><code>timing(category:String, timingVar:String, timingVar:Number, timingLabel:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings">Documentation</a></li>
 </ol>
 <hr>
+<h4>Configuring Google Analytics</h4>
+<p>After you've installed the addon, open your config file located in <code>config/environment.js</code>. Next, add a new object to the <code>ENV</code> variable called <code>emberTracker</code>. Finally, add an object on it called <code>analyticsSettings</code> with your <code>trackingId</code>. Your config should look something similar to:
+</p>
+<pre>[...]
+module.exports = function(environment) {
+	var ENV = {
+		[...]
+		APP: {
+			// Here you can pass flags/options to your application instance
+			// when it is created
+		},
+		emberTracker: {
+			analyticsSettings: {
+				trackingId: 'UA-########-#',
+			},
+		},
+	};
+[...]</pre>
+<p>Feel free to change your trackingId based on the environment you're in.</p>
+<p>Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking pageviews and inject the service into your controllers/components.</p>
+<p>
+	<strong>Options</strong>
+</p>
+<p>
+	There are two options available for Google Analytics you may want to use in your <code>environment.js</code> file. They are:
+</p>
+<p>
+	<ul>
+		<li><code>LOG_PAGEVIEW</code> (boolean) - Logs all <code>pageview</code> events to the console.</li>
+		<li><code>LOG_EVENTS</code> (boolean) - Logs all <code>event</code>, <code>timing</code> and <code>network</code> (social) requests to the console.</li>
+	</ul>
+</p>
+<p>
+	These options allow you to ensure your events are being fired.
+</p>
+<hr>
 <h4>Tracking Routes</h4>
 <p>First, open up your <code>router.js</code> file and add the <code>GoogleAnalyticsRoute</code> mixin like below:</p>
 <pre>import Ember from 'ember';

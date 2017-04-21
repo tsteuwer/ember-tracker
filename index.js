@@ -48,11 +48,14 @@ module.exports = {
 	 * @return {String}
 	 */
 	addTealiumIQ(settings, env) {
-		const accountName = get(settings, 'emberTracker.tealiumSettings.accountName');
+		const tealiumSettings = get(settings, 'emberTracker.tealiumSettings');
 
-		if (env === 'test' || !accountName) {
+		if (env === 'test' || !tealiumSettings || !tealiumSettings.accountName) {
 			return '';
 		}
+
+		const accountName = tealiumSettings.accountName,
+			onload = Boolean(tealiumSettings.onload);
 
 		let tealiumEnv;
 
@@ -68,9 +71,23 @@ module.exports = {
 				break;
 		}
 
-		this.ui.writeLine(`Including Tealium IQ (${accountName} for ${tealiumEnv})`);
+		let text = `Including Tealium IQ (${accountName} for ${tealiumEnv}`;
+		text += (onload ? ' on load' : '') + ')';
 
-		return `<script>window.utag_cfg_ovrd={noview:true};(function(a,b,c,d){a='//tags.tiqcdn.com/utag/${accountName}/main/${tealiumEnv}/utag.js';b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);})();</script>`;
+		this.ui.writeLine(text);
+
+		let script = `window.utag_cfg_ovrd={noview:true};`;
+		if (onload) {
+			script += 'window.addEventListener("load", function() {console.log("onload");';
+		}
+		
+		script += `(function(a,b,c,d){a='//tags.tiqcdn.com/utag/${accountName}/main/${tealiumEnv}/utag.js';b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);})();`;
+
+		if (onload) {
+			script += "});";
+		}
+
+		return `<script>${script}</script>`;
 	},
 };
 
