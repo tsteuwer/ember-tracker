@@ -64,7 +64,7 @@ Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking
 
 There are two options available for Google Analytics you may want to use in your `environment.js` file. They are:
 
-* `LOG_PAGEVIEWS` (boolean) - Logs all `pageview` events to the console.
+* `LOG_PAGEVIEW` (boolean) - Logs all `pageview` events to the console.
 * `LOG_EVENTS` (boolean) - Logs all `event`, `timing` and `network` (social) requests to the console.
 
 These options allow you to ensure your events are being fired.
@@ -95,7 +95,7 @@ module.exports = function(environment) {
 
 There is one option available for Tealium you may wish to use in your `environment.js` file. It is:
 
-* `onload` (boolean) - Loads Tealium after the `window.onload` event fires. It uses `addEventListener` which requires />= IE9.
+* `onload` (boolean) - Loads Tealium after the `window.onload` event fires. It uses `addEventListener` which requires >= IE9.
 
 
 ### Notes
