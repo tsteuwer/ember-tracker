@@ -1,5 +1,9 @@
 # ember-tracker
 
+[![Build Status][build-status-img]][build-status-link]
+[![NPM][npm-badge-img]][npm-badge-link]
+[![Ember Observer Score][ember-observer-badge]][ember-observer-url]
+
 The simple way of tracking your app or addon using:
 
 [Google Analytics](https://developers.google.com/analytics/devguides/collection/analyticsjs/) using `analytics.js`.
@@ -12,14 +16,14 @@ The simple way of tracking your app or addon using:
 [Tealium IQ](http://tealium.com/products/tealium-iq-tag-management-system/) tag manager
 - [x] Support for dev, qa and production environments out-of-the-box.
 
-For more information about this addon, please visit the [Ember Tracker website](https://tsteuwer.github.io/ember-tracker).
+For more information about this addon, please visit the [Ember Tracker website][main-site-url].
 
 ## Minimum Requirements
 
 * Ember 2.3+
 * Ember CLI
 
-For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill](https://github.com/rwjblue/ember-getowner-polyfill) addon.
+For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill][getowner-poly-url] addon.
 
 ## Setup
 
@@ -53,7 +57,7 @@ module.exports = function(environment) {
 
 Feel free to change your `trackingId` based on the environment you're in.
 
-Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking pageviews and inject the service into your controllers/components. [Learn how](https://tsteuwer.github.io/ember-tracker/#/google-analytics)!
+Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking pageviews and inject the service into your controllers/components. [Learn how][ga-doc-url]!
 
 ### Options
 
@@ -88,7 +92,7 @@ module.exports = function(environment) {
 
 That's it! The addon will take care of using the dev, qa or production environments for you. For reference, it determines which environment to use in Tealium based on the following conditions:
 
-You're now ready to add the TealiumRoute mixin to your Router to start updating Tealium on new routes. [Learn how](https://tsteuwer.github.io/ember-tracker/#/tealium)!
+You're now ready to add the TealiumRoute mixin to your Router to start updating Tealium on new routes. [Learn how][tealium-doc-url]!
 
 Ember Environment | Tealium Environment
 ----------------- | -------------------
@@ -98,7 +102,7 @@ all others | qa
 
 ## Additional Reading 
 
-I've put together more documentation on the [ember-tracker](https://tsteuwer.github.io/ember-tracker) website on how to use both the Google Analytics services as well as updating Tealium during route transitions.
+I've put together more documentation on the [ember-tracker][main-site-url] website on how to use both the Google Analytics services as well as updating Tealium during route transitions.
 
 # Addon Maintenance
 
@@ -125,3 +129,14 @@ I've put together more documentation on the [ember-tracker](https://tsteuwer.git
 * `ember build`
 
 For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+
+[main-site-url]: https://tsteuwer.github.io/ember-tracker
+[build-status-img]: https://travis-ci.org/tsteuwer/ember-tracker.svg?branch=master
+[build-status-link]: https://travis-ci.org/tsteuwer/ember-tracker
+[npm-badge-img]: https://badge.fury.io/js/ember-tracker.svg
+[npm-badge-link]: http://badge.fury.io/js/ember-tracker
+[ember-observer-badge]: http://emberobserver.com/badges/ember-tracker.svg
+[ember-observer-url]: http://emberobserver.com/addons/ember-tracker
+[ga-doc-url]: https://tsteuwer.github.io/ember-tracker/#/google-analytics
+[tealium-doc-url]: https://tsteuwer.github.io/ember-tracker/#/tealium
+[getowner-poly-url]: https://github.com/rwjblue/ember-getowner-polyfill

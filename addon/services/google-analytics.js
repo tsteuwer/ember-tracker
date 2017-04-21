@@ -60,7 +60,7 @@ export default Ember.Service.extend({
 			ga = () => {};
 		}
 
-		const config = getOwner(this).resolveRegistration('config:environment') || {};
+		const config = this._getConfig();
 
 		this.setProperties({
 			_logAnalyticsPageViews: get(config, 'emberTracker.analyticsSettings.LOG_PAGEVIEW'),
@@ -154,6 +154,16 @@ export default Ember.Service.extend({
 		} else if (EVENTS.indexOf(type) > -1 && this.get('_logAnalyticsEvents')) {
 			this._log(type, args);
 		}
+	},
+
+	/**
+	 * Returns the config object.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @return {Object}
+	 */
+	_getConfig() {
+		return getOwner(this).resolveRegistration('config:environment') || {};
 	},
 
 	/**
