@@ -278,7 +278,7 @@ export default Ember.Service.extend({
 
 		while (events.length) {
 			let event = events.shift();
-			this._send.call(this, ...event);
+			this._send.apply(this, event);
 		}
 	},
 
