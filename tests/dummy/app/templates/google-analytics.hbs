@@ -36,12 +36,13 @@ module.exports = function(environment) {
 	<strong>Options</strong>
 </p>
 <p>
-	There are two options available for Google Analytics you may want to use in your <code>environment.js</code> file. They are:
+	There are three options available for Google Analytics you may want to use in your <code>environment.js</code> file. They are:
 </p>
 <p>
 	<ul>
 		<li><code>LOG_PAGEVIEW</code> (boolean) - Logs all <code>pageview</code> events to the console.</li>
 		<li><code>LOG_EVENTS</code> (boolean) - Logs all <code>event</code>, <code>timing</code> and <code>network</code> (social) requests to the console.</li>
+		<li><code>onload</code> (boolean) - Lazy loads GoogleAnalytics after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
 	</ul>
 </p>
 <p>

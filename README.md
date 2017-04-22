@@ -62,10 +62,11 @@ Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking
 
 ### Options
 
-There are two options available for Google Analytics you may want to use in your `environment.js` file. They are:
+There are three options available for Google Analytics you may want to use in your `environment.js` file. They are:
 
 * `LOG_PAGEVIEW` (boolean) - Logs all `pageview` events to the console.
 * `LOG_EVENTS` (boolean) - Logs all `event`, `timing` and `network` (social) requests to the console.
+* `onload` (boolean) - Lazy loads Google Analytics after the `window.onload` function fires.
 
 These options allow you to ensure your events are being fired.
 
