@@ -26,10 +26,7 @@ test('computed@isAvailable', function(assert) {
 });
 
 test('computed@api', function(assert) {
-	assert.expect(2);
-
-	assert.equal(typeof service.get('api'), 'function', 'it should always be a function so to not break anything');
-
+	assert.expect(1);
 	assert.throws(() => {
 		service.set('api', false);
 	}, 'it should throw an error that it is read only and cannot be modified');
@@ -126,6 +123,7 @@ test('timing', function(assert) {
 });
 
 test('pageview', function(assert) {
+	assert.expect(3);
 	const calls = [];
 	service.set('_ga', function(...args) {
 		calls.push(args);
@@ -133,7 +131,81 @@ test('pageview', function(assert) {
 
 	service.pageview('/cats/hurting-people', 'Catz Are Craycray');
 
-	assert.expect(calls.length, 2, 'it should call the google api twice');
+	assert.equal(calls.length, 2, 'it should call the google api twice');
 	assert.deepEqual(calls[0], ['set', 'page', '/cats/hurting-people']);
 	assert.deepEqual(calls[1], ['send', 'pageview', { page: '/cats/hurting-people', title: 'Catz Are Craycray' }]);
+});
+
+test('_send should push to the awaiting stack when GA is not available', function(assert) {
+	assert.expect(3);
+	service._send('yes', 'no', 'maybe', 'so');
+	service._send('omg', 'becky', 'look', 'at', 'her', 'butt');
+
+	const awaiting = service.get('_awaitingEvents');
+	assert.equal(awaiting.length, 2, 'it should push to the awaiting stack');
+	assert.deepEqual(awaiting[0], ['yes', 'no', 'maybe', 'so'], 'it should have our first event');
+	assert.deepEqual(awaiting[1], ['omg', 'becky', 'look', 'at', 'her', 'butt'], 'it should have our second event');
+});
+
+test('_sendPageView should push to the awaiting stack when GA is not available', function(assert) {
+	assert.expect(3);
+	service._sendPageView('overwatch', 'ftw');
+	service._sendPageView('genji', 'is-a-bastard');
+
+	const awaiting = service.get('_awaitingPageViews');
+	assert.equal(awaiting.length, 2, 'it should push to the awaiting stack');
+	assert.deepEqual(awaiting[0], { page: 'overwatch', title: 'ftw' }, 'it should have our first pageview');
+	assert.deepEqual(awaiting[1], { page: 'genji', title: 'is-a-bastard' }, 'it should have our second pageview');
+});
+
+test('_sendPreviousEvents should not send anything if there are none', function(assert) {
+	assert.expect(0);
+
+	service._send = function() {
+		assert.ok(false, 'this should not be called');
+	};
+
+	service._sendPreviousEvents();
+});
+
+test('_sendPreviousPageViews should not send anything if there are none', function(assert) {
+	assert.expect(0);
+
+	service.pageview = function() {
+		assert.ok(false, 'this should not be called');
+	};
+
+	service._sendPreviousPageViews();
+});
+
+test('_sendPreviousEvents should send anything if there is anything in the stack', function(assert) {
+	let called = 0;
+	service._send = function() {
+		called++;
+	};
+	service.set('_awaitingEvents', [{
+		something: 'yep',
+	}, {
+		another: 'something',
+	}, {
+		oh: 'lookie here',
+	}]);
+
+	service._sendPreviousEvents();
+	assert.equal(called, 3, 'it should be called three times');
+});
+
+test('_sendPreviousEvents should send anything if there is anything in the stack', function(assert) {
+	let called = 0;
+	service.pageview = function() {
+		called++;
+	};
+	service.set('_awaitingPageViews', [{
+		something: 'yep',
+	}, {
+		another: 'something',
+	}]);
+
+	service._sendPreviousPageViews();
+	assert.equal(called, 2, 'it should be called twice');
 });

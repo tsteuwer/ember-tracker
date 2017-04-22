@@ -30,15 +30,31 @@ module.exports = {
 	 * @return {String}
 	 */
 	addGoogleAnalytics(settings, env) {
-		const trackingId = get(settings, 'emberTracker.analyticsSettings.trackingId');
+		const analyticsSettings = get(settings, 'emberTracker.analyticsSettings');
+		let script = '', text;
 
-		if (env === 'test' || !trackingId) {
+		if (env === 'test' || !analyticsSettings || !analyticsSettings.trackingId) {
 			return '';
 		}
 
-		this.ui.writeLine(`Including Google Analytics (${trackingId})`);
+		const trackingId = analyticsSettings.trackingId,
+			onload = Boolean(analyticsSettings.onload);
 
-		return `<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${trackingId}','auto');</script>`;
+		text = `Including Google Analytics (${trackingId}`;
+		text += (onload ? ' on load' : '') + ')';
+		this.ui.writeLine(text);
+
+		if (onload) {
+			script += 'window.addEventListener("load",function(){';
+		}
+
+		script += `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${trackingId}','auto');`;
+
+		if (onload) {
+			script += "});";
+		}
+
+		return `<script>${script}</script>`;
 	},
 
 	/**
@@ -49,6 +65,7 @@ module.exports = {
 	 */
 	addTealiumIQ(settings, env) {
 		const tealiumSettings = get(settings, 'emberTracker.tealiumSettings');
+		let script = `window.utag_cfg_ovrd={noview:true};`, tealiumEnv, text;
 
 		if (env === 'test' || !tealiumSettings || !tealiumSettings.accountName) {
 			return '';
@@ -56,8 +73,6 @@ module.exports = {
 
 		const accountName = tealiumSettings.accountName,
 			onload = Boolean(tealiumSettings.onload);
-
-		let tealiumEnv;
 
 		switch (env) {
 			case 'development':
@@ -71,12 +86,11 @@ module.exports = {
 				break;
 		}
 
-		let text = `Including Tealium IQ (${accountName} for ${tealiumEnv}`;
+		text = `Including Tealium IQ (${accountName} for ${tealiumEnv}`;
 		text += (onload ? ' on load' : '') + ')';
 
 		this.ui.writeLine(text);
 
-		let script = `window.utag_cfg_ovrd={noview:true};`;
 		if (onload) {
 			script += 'window.addEventListener("load", function() {console.log("onload");';
 		}

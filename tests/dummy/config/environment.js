@@ -24,8 +24,7 @@ module.exports = function(environment) {
 		emberTracker: {
 			analyticsSettings: {
 				trackingId: 'UA-97028033-2',
-				LOG_PAGEVIEW: true,
-				LOG_EVENTS: true,
+				onload: true,
 			},
 		},
   };

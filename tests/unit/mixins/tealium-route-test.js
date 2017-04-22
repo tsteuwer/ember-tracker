@@ -11,17 +11,10 @@ const assign = Ember.assign || Ember.merge;
 module('Unit | Mixin | tealium route');
 
 test('should initialize variables then look for `utag` on the window', function(assert) {
-	let looked = false;
   const TealiumRouteObject = Ember.Object.extend(TealiumRouteMixin);
-  const subject = TealiumRouteObject.create({
-		// This must be part of every test. Otherwise you'll infinitely loop looking for it.
-		_etCheckForUtag() {
-			looked = true;
-		},
-	});
+  const subject = TealiumRouteObject.create({});
   assert.equal(subject.get('_etLastView'), null, 'should be initialized to null');
   assert.equal(subject.get('_tealium'), null, 'should be initialized to null');
-	assert.ok(looked, 'should be called');
 });
 
 test('didTransition should assign `_etLastView` if tealium isnt available yet', function(assert) {
@@ -30,8 +23,6 @@ test('didTransition should assign `_etLastView` if tealium isnt available yet', 
 	});
   const TealiumRouteObject = Ember.Object.extend(Evented, TealiumRouteMixin);
   const subject = TealiumRouteObject.create({
-		// This must be part of every test. Otherwise you'll infinitely loop looking for it.
-		_etCheckForUtag() {},
 		_etGetCurrentRoute() {
 			return route;
 		},
@@ -54,8 +45,6 @@ test('didTransition should merge DEFAULT_VIEW and object that comes back from ge
 	});
   const TealiumRouteObject = Ember.Object.extend(Evented, TealiumRouteMixin);
   const subject = TealiumRouteObject.create({
-		// This must be part of every test. Otherwise you'll infinitely loop looking for it.
-		_etCheckForUtag() {},
 		_etGetCurrentRoute() {
 			return route;
 		},
@@ -80,8 +69,6 @@ test('didTransition should send the view to tealium if available', function(asse
 	});
   const TealiumRouteObject = Ember.Object.extend(Evented, TealiumRouteMixin);
   const subject = TealiumRouteObject.create({
-		// This must be part of every test. Otherwise you'll infinitely loop looking for it.
-		_etCheckForUtag() {},
 		_etGetCurrentRoute() {
 			return route;
 		},
