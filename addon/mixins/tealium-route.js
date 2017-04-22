@@ -15,6 +15,7 @@ export const DEFAULT_VIEW = {
 const {
 	run,
 	typeOf,
+	testing,
 } = Ember;
 
 export default Ember.Mixin.create({
@@ -32,7 +33,10 @@ export default Ember.Mixin.create({
 		});
 
 		this._super(...arguments);
-		this._etCheckForUtag();
+
+		if (!testing) {
+			this._etCheckForUtag();
+		}
 	},
 
 	/**
@@ -42,9 +46,7 @@ export default Ember.Mixin.create({
    * @return {undefined}
    */
 	_etCheckForUtag() {
-		run(() => {
-			this.set('_tealium', window && window.utag);
-		});
+		run(() => this.set('_tealium', window && window.utag));
 
 		if (this.get('_tealium')) {
 			const lastView = this.get('_etLastView');

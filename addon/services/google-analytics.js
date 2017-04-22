@@ -1,4 +1,4 @@
-/*eslint no-console: ["error", { allow: ["warn", "log"] }] */
+/*eslint no-console: ["error", { allow: ["info", "log"] }] */
 /*eslint no-unused-vars: 0 */
 import Ember from 'ember';
 
@@ -10,9 +10,11 @@ const {
 	},
 	get,
 	getOwner,
+	run,
 	testing,
 } = Ember;
 
+const LOG_PREFIX = '[EmberTracker]';
 const EVENTS = ['event', 'network', 'timing'];
 
 export default Ember.Service.extend({
@@ -34,6 +36,7 @@ export default Ember.Service.extend({
 	 */
 	api: alias('_ga').readOnly(),
 
+
 	/**
 	 * The raw window.ga object.
 	 * @private
@@ -52,21 +55,59 @@ export default Ember.Service.extend({
 	 */
 	init() {
 		this._super(...arguments);
-		let ga = (window || {}).ga;
-
-		assert(ga, '`window.ga` has not been set');
-
-		if (!ga) {
-			ga = () => {};
-		}
 
 		const config = this._getConfig();
 
 		this.setProperties({
+			/**
+			 * Holds events that need to be sent once analytics has loaded.
+			 * @private
+			 * @type {Array}
+			 */
+			_awaitingEvents: [],
+
+			/**
+			 * Holds pageviews that need to be sent once analytics has loaded.
+			 * @private
+			 * @type {Array}
+			 */
+			_awaitingPageViews: [],
+
+			/**
+			 * Flag for logging pageviews.
+			 * @private
+			 * @type {Boolean}
+			 */
 			_logAnalyticsPageViews: get(config, 'emberTracker.analyticsSettings.LOG_PAGEVIEW'),
+
+			/**
+			 * Flag for logging events.
+			 * @private
+			 * @type {Boolean}
+			 */
 			_logAnalyticsEvents: get(config, 'emberTracker.analyticsSettings.LOG_EVENTS'),
-			_ga: ga
 		});
+
+		if (!testing) {
+			this._etCheckForGA();
+		}
+	},
+
+	/**
+	 * Checks for the ga param on the window and sets it. If there was previous events that need to be send, it sends it.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @return {undefined}
+	 */
+	_etCheckForGA() {
+		run(() => this.set('_ga', window && window.ga));
+		
+		if (this.get('_ga')) {
+			this._sendPreviousEvents();
+			this._sendPreviousPageViews();
+		} else {
+			run.later(this, '_etCheckForGA', 500);	
+		}
 	},
 
 	/**
@@ -122,18 +163,10 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	pageview(page, title) {
-		const ga = this.get('_ga');
-
 		assert(page, 'page should be a valid string');
 		assert(title, 'page title should be a valid string');
 
-		ga('set', 'page', page);
-		ga('send', 'pageview', {
-			page,
-			title,
-		});
-
-		this.log('pageview', page, title);
+		this._sendPageView(page, title);
 	},
 
 	/**
@@ -175,7 +208,7 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_log(type, args) {
-		console.log(`[EmberTracker] Google Analytics ${type} sent:`, args);
+		console.log(`${LOG_PREFIX} Google Analytics ${type} sent:`, args);
 	},
 
 	/**
@@ -192,8 +225,84 @@ export default Ember.Service.extend({
 	 */
 	_send(...args) {
 		const ga = this.get('_ga');
-		ga.apply(ga, ['send'].concat(args));
+		
+		if (ga) {
+			ga.apply(ga, ['send'].concat(args));
 
-		this.log.apply(this, args);
-	}
+			this.log.apply(this, args);
+		} else {
+			this.get('_awaitingEvents').push(args);
+		}
+	},
+
+	/**
+	 * Sends off the pageview or pushes it to the awaiting stack.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @param {String} page (Url)
+	 * @param {String} title
+	 * @return {undefined}
+	 */
+	_sendPageView(page, title) {
+		const ga = this.get('_ga');
+		
+		if (ga) {
+			ga('set', 'page', page);
+			ga('send', 'pageview', {
+				page,
+				title,
+			});
+
+			this.log('pageview', page, title);
+		} else {
+			this.get('_awaitingPageViews').push({
+				page,
+				title,
+			});
+		}
+	},
+
+	/**
+	 * Sends awaiting events to GA.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @return {undefined}
+	 */
+	_sendPreviousEvents() {
+		const events = this.get('_awaitingEvents');
+		if (!events.length) {
+			return;
+		}
+
+		console.info(`${LOG_PREFIX} Sending awaiting Analytics events: ${events.length}`);
+
+		while (events.length) {
+			let event = events.shift();
+			this._send.apply(this, event);
+		}
+	},
+
+	/**
+	 * Sends awaiting pageviews to GA.
+	 * @private
+	 * @memberOf {GoogleAnalytics}
+	 * @return {undefined}
+	 */
+	_sendPreviousPageViews() {
+		const pageviews = this.get('_awaitingPageViews');
+		if (!pageviews.length) {
+			return;
+		}
+
+		console.info(`${LOG_PREFIX} Sending awaiting Analytics pageviews: ${pageviews.length}`);
+
+		while (pageviews.length) {
+			let {
+				page,
+				title,
+			} = pageviews.shift();
+
+			this.pageview(page,title); 
+		}
+	},
 });
