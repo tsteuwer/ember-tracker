@@ -30,19 +30,25 @@ export default Ember.Mixin.create({
 			route = this._etGetCurrentRoute(routeName),
 			ga = this.get('_ga');
 
-		let page = this.get('url'),
-			title = getTitle(route);
+		const applyArgs = [this.get('url'), getTitle(route)];
 
 		if (typeOf(route.beforeAnalyticsPageview) === 'function') {
 			const changes = route.beforeAnalyticsPageview(ga);
 
 			if (changes) {
-				page = changes.page || page;
-				title = changes.title || title;
+				if (changes.page) {
+					applyArgs[0] = changes.page;
+				}
+				if (changes.title) {
+					applyArgs[1] = changes.title;
+				}
+				if (changes.options) {
+					applyArgs[2] = changes.options;
+				}
 			}
 		}
 
-		ga.pageview(page, title);
+		ga.pageview.apply(ga, applyArgs);
 	}),
 	
 	/**
