@@ -99,3 +99,43 @@ test('didTransition should call the beforeAnalyticsPageview on the route if it e
 		subject.trigger('didTransition');
 	});
 });
+
+test('didTransition should call the beforeAnalyticsPageview on the route if it exists to override page, title and add options', function(assert) {
+	assert.expect(3);
+
+	run(() => {
+		let GoogleAnalyticsRouteObject = Ember.Object.extend(Evented, GoogleAnalyticsRouteMixin);
+		let subject = GoogleAnalyticsRouteObject.create({
+			currentRouteName: 'catz.special-kitty-name',
+			url: '/catz/special-kitty-name',
+			_etGetCurrentRoute() {
+				return Ember.Object.create({
+					title: 'Catz',
+					beforeAnalyticsPageview() {
+						return {
+							page: '/who/dat',
+							title: 'Catz R Craycray',
+							options: {
+								myOptions: 'are here',
+								one: 'is two',
+							},
+						};
+					},
+				});
+			},
+		});
+
+		subject.set('_ga', {
+			pageview(page, title, options) {
+				assert.equal(page, '/who/dat', 'should override the page');
+				assert.equal(title, 'Catz R Craycray', 'should override the title');
+				assert.deepEqual(options, {
+					myOptions: 'are here',
+					one: 'is two',
+				}, 'should send options');
+			},
+		});
+
+		subject.trigger('didTransition');
+	});
+});
