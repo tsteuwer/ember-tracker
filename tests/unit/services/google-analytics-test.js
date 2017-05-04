@@ -136,6 +136,20 @@ test('pageview', function(assert) {
 	assert.deepEqual(calls[1], ['send', 'pageview', { page: '/cats/hurting-people', title: 'Catz Are Craycray' }]);
 });
 
+test('pageview with options', function(assert) {
+	assert.expect();
+	const calls = [];
+	service.set('_ga', function(...args) {
+		calls.push(args);
+	});
+
+	service.pageview('/cats/hurting-people', 'Catz Are Craycray', { herp: 'derp' });
+
+	assert.equal(calls.length, 2, 'it should call the google api twice');
+	assert.deepEqual(calls[0], ['set', 'page', '/cats/hurting-people']);
+	assert.deepEqual(calls[1], ['send', 'pageview', { page: '/cats/hurting-people', title: 'Catz Are Craycray', herp: 'derp' }]);
+});
+
 test('_send should push to the awaiting stack when GA is not available', function(assert) {
 	assert.expect(3);
 	service._send('yes', 'no', 'maybe', 'so');
@@ -148,14 +162,16 @@ test('_send should push to the awaiting stack when GA is not available', functio
 });
 
 test('_sendPageView should push to the awaiting stack when GA is not available', function(assert) {
-	assert.expect(3);
+	assert.expect(4);
 	service._sendPageView('overwatch', 'ftw');
 	service._sendPageView('genji', 'is-a-bastard');
+	service._sendPageView('genji', 'is-a-bastard', { no: 'yes' });
 
 	const awaiting = service.get('_awaitingPageViews');
-	assert.equal(awaiting.length, 2, 'it should push to the awaiting stack');
-	assert.deepEqual(awaiting[0], { page: 'overwatch', title: 'ftw' }, 'it should have our first pageview');
-	assert.deepEqual(awaiting[1], { page: 'genji', title: 'is-a-bastard' }, 'it should have our second pageview');
+	assert.equal(awaiting.length, 3, 'it should push to the awaiting stack');
+	assert.deepEqual(awaiting[0], { page: 'overwatch', title: 'ftw', options: undefined}, 'it should have our first pageview');
+	assert.deepEqual(awaiting[1], { page: 'genji', title: 'is-a-bastard', options: undefined }, 'it should have our second pageview');
+	assert.deepEqual(awaiting[2], { page: 'genji', title: 'is-a-bastard', options: { no: 'yes' }}, 'it should have our second pageview');
 });
 
 test('_sendPreviousEvents should not send anything if there are none', function(assert) {

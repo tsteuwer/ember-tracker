@@ -160,13 +160,14 @@ export default Ember.Service.extend({
 	 * @memberOf {GoogleAnalytics}
 	 * @param {String} page (e.g. "/", "/my-new-page", "/my-new-page/start"
 	 * @param {String} title The page's title
+	 * @param {Object} options Other options to send with pageview event 
 	 * @return {undefined}
 	 */
-	pageview(page, title) {
+	pageview(page, title, options) {
 		assert(page, 'page should be a valid string');
 		assert(title, 'page title should be a valid string');
 
-		this._sendPageView(page, title);
+		this._sendPageView(page, title, options);
 	},
 
 	/**
@@ -243,21 +244,22 @@ export default Ember.Service.extend({
 	 * @param {String} title
 	 * @return {undefined}
 	 */
-	_sendPageView(page, title) {
+	_sendPageView(page, title, options) {
 		const ga = this.get('_ga');
 		
 		if (ga) {
 			ga('set', 'page', page);
-			ga('send', 'pageview', {
+			ga('send', 'pageview', Ember.assign({
 				page,
 				title,
-			});
+			}, options || {}));
 
-			this.log('pageview', page, title);
+			this.log('pageview', page, title, options);
 		} else {
 			this.get('_awaitingPageViews').push({
 				page,
 				title,
+				options,
 			});
 		}
 	},
@@ -300,9 +302,10 @@ export default Ember.Service.extend({
 			let {
 				page,
 				title,
+				options,
 			} = pageviews.shift();
 
-			this.pageview(page,title); 
+			this.pageview(page,title,options); 
 		}
 	},
 });
