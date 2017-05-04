@@ -43,6 +43,9 @@ module.exports = function(environment) {
 		<li><code>LOG_PAGEVIEW</code> (boolean) - Logs all <code>pageview</code> events to the console.</li>
 		<li><code>LOG_EVENTS</code> (boolean) - Logs all <code>event</code>, <code>timing</code> and <code>network</code> (social) requests to the console.</li>
 		<li><code>onload</code> (boolean) - Lazy loads GoogleAnalytics after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
+		<li>
+			<code>createOptions</code> (object) - Adds create options to your <code>ga('create', 'UA-####', { ..options..})</code> call. This object will be encoded through <code>JSON.stringify</code>.
+		</li>
 	</ul>
 </p>
 <p>
