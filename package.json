@@ -1,6 +1,6 @@
 {
   "name": "ember-tracker",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Easily add Google Analytics page and event tracking to your Ember JS Application.",
   "keywords": [
     "ember-addon",
