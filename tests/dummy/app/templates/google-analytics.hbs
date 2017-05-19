@@ -46,6 +46,7 @@ module.exports = function(environment) {
 		<li>
 			<code>createOptions</code> (object) - Adds create options to your <code>ga('create', 'UA-####', { ..options..})</code> call. This object will be encoded through <code>JSON.stringify</code>.
 		</li>
+		<li><code>afterCreate</code> (string) - Appended to the JavaScript after the call to <code>ga('create', 'UA-####');</code>. Use this to run JavaScript after the "create" function, such as Optimizely's "activeUniversalAnalytics" call.</li>
 	</ul>
 </p>
 <p>

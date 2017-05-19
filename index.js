@@ -40,7 +40,8 @@ module.exports = {
 		const trackingId = analyticsSettings.trackingId,
 			onload = Boolean(analyticsSettings.onload),
 			options = analyticsSettings.createOptions,
-			createOptions = options ? `,${JSON.stringify(options)}` : '';
+			createOptions = options ? `,${JSON.stringify(options)}` : '',
+			afterCreate = typeof analyticsSettings.afterCreate === 'string' ? analyticsSettings.afterCreate : '';
 
 		text = `Including Google Analytics (${trackingId}`;
 		text += (onload ? ' on load' : '') + ')';
@@ -50,7 +51,7 @@ module.exports = {
 			script += 'window.addEventListener("load",function et_RmGa(){';
 		}
 
-		script += `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${trackingId}'${createOptions});`;
+		script += `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','${trackingId}'${createOptions});${afterCreate}`;
 
 		if (onload) {
 			script += "window.removeEventListener('load',et_RmGa,false);},false);";

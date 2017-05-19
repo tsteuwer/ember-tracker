@@ -68,6 +68,7 @@ There are three options available for Google Analytics you may want to use in yo
 * `LOG_EVENTS` (boolean) - Logs all `event`, `timing` and `network` (social) requests to the console.
 * `onload` (boolean) - Lazy loads Google Analytics after the `window.onload` function fires.
 * `createOptions` (object) - This will get `JSON.stringify` encoded and passed to the create object as the last parameter.
+* `afterCreate` (string) - Appended to the JavaScript after the call to `ga('create', 'UA-####');`. Use this to run JavaScript after the "create" function, such as Optimizely's "activeUniversalAnalytics" call. Although this is a string, yit must represent valid JavaScript.
 
 ## Configuring Tealium IQ
 
