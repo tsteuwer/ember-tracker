@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { IN_BROWSER } from 'ember-tracker/-privates/utils';
 
 const {
 	on,
@@ -25,7 +26,7 @@ export default Ember.Route.extend({
  * @return {undefined}
  */
 function _updateMetaInfo() {
-	if (testing) {
+	if (testing || !IN_BROWSER) {
 		return;
 	}
 

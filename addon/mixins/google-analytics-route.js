@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { getCurrentRoute } from 'ember-tracker/-privates/utils';
+import { IN_BROWSER } from 'ember-tracker/-privates/utils';
 
 const {
 	inject: {
@@ -70,5 +71,5 @@ export default Ember.Mixin.create({
  * @return {String}
  */
 function getTitle(route) {
-	return route.get('title') || (document && document.title) || '';
+	return route.get('title') || (IN_BROWSER && document && document.title) || '';
 }

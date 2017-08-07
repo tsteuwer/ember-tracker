@@ -2,6 +2,8 @@
 /*eslint no-unused-vars: 0 */
 import Ember from 'ember';
 
+import { IN_BROWSER } from 'ember-tracker/-privates/utils';
+
 const {
 	assert,
 	computed: {
@@ -88,7 +90,7 @@ export default Ember.Service.extend({
 			_logAnalyticsEvents: get(config, 'emberTracker.analyticsSettings.LOG_EVENTS'),
 		});
 
-		if (!testing) {
+		if (!testing && IN_BROWSER) {
 			this._etCheckForGA();
 		}
 	},

@@ -23,6 +23,8 @@ module.exports = function(environment) {
     },
 		emberTracker: {
 			analyticsSettings: {
+				LOG_PAGEVIEW: true,
+				LOG_EVENTS: true,
 				trackingId: 'UA-97028033-2',
 				onload: false,
 				afterCreate: 'console.log("test after create");'
