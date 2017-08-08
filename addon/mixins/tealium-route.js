@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { getCurrentRoute, mergeObjects } from 'ember-tracker/-privates/utils';
+import { IN_BROWSER } from 'ember-tracker/-privates/utils';
 
 const {
 	getWithDefault,
@@ -34,7 +35,7 @@ export default Ember.Mixin.create({
 
 		this._super(...arguments);
 
-		if (!testing) {
+		if (!testing && IN_BROWSER) {
 			this._etCheckForUtag();
 		}
 	},

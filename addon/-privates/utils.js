@@ -1,3 +1,5 @@
+/*global window document*/
+
 import Ember from 'ember';
 
 /**
@@ -16,3 +18,17 @@ export function getCurrentRoute(context, routeName) {
  * @type {Function}
  */
 export const mergeObjects = Ember.assign || Ember.merge;
+
+/**
+ * Find out if we're in fastboot.
+ * @public
+ * @type {Boolean}
+ */
+export const IN_BROWSER = !!window && !!window.document;
+
+/**
+ * Merge or assign.
+ * @public
+ * @type {Function}
+ */
+export const mergeOrAssign = Ember.assign || Ember.merge;
