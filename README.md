@@ -16,6 +16,8 @@ The simple way of tracking your app or addon using:
 [Tealium IQ](http://tealium.com/products/tealium-iq-tag-management-system/) tag manager
 - [x] Support for dev, qa and production environments out-of-the-box.
 
+*FastBoot Ready!*
+
 For more information about this addon, please visit the [Ember Tracker website][main-site-url].
 
 ## Minimum Requirements

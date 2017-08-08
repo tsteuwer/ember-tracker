@@ -1,3 +1,5 @@
+/*global window document*/
+
 import Ember from 'ember';
 
 /**
@@ -22,4 +24,11 @@ export const mergeObjects = Ember.assign || Ember.merge;
  * @public
  * @type {Boolean}
  */
-export const IN_BROWSER = typeof FastBoot === 'undefined';
+export const IN_BROWSER = !!window && !!window.document;
+
+/**
+ * Merge or assign.
+ * @public
+ * @type {Function}
+ */
+export const mergeOrAssign = Ember.assign || Ember.merge;

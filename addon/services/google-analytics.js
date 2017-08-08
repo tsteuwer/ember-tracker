@@ -2,7 +2,7 @@
 /*eslint no-unused-vars: 0 */
 import Ember from 'ember';
 
-import { IN_BROWSER } from 'ember-tracker/-privates/utils';
+import { IN_BROWSER, mergeOrAssign } from 'ember-tracker/-privates/utils';
 
 const {
 	assert,
@@ -251,7 +251,7 @@ export default Ember.Service.extend({
 		
 		if (ga) {
 			ga('set', 'page', page);
-			ga('send', 'pageview', Ember.assign({
+			ga('send', 'pageview', mergeOrAssign({
 				page,
 				title,
 			}, options || {}));
