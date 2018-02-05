@@ -13,7 +13,7 @@ const {
 	get,
 	getOwner,
 	run,
-	testing,
+	set,
 } = Ember;
 
 const LOG_PREFIX = '[EmberTracker]';
@@ -90,7 +90,7 @@ export default Ember.Service.extend({
 			_logAnalyticsEvents: get(config, 'emberTracker.analyticsSettings.LOG_EVENTS'),
 		});
 
-		if (!testing && IN_BROWSER) {
+		if (!Ember.testing && IN_BROWSER) {
 			this._etCheckForGA();
 		}
 	},
@@ -102,9 +102,9 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_etCheckForGA() {
-		run(() => this.set('_ga', window && window.ga));
+		run(() => set(this, '_ga', window && window.ga));
 		
-		if (this.get('_ga')) {
+		if (get(this, '_ga')) {
 			this._sendPreviousEvents();
 			this._sendPreviousPageViews();
 		} else {
@@ -181,13 +181,13 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	log(type, ...args) {
-		if (testing) {
+		if (Ember.testing) {
 			return;
 		}
 
-		if (type === 'pageview' && this.get('_logAnalyticsPageViews')) {
+		if (type === 'pageview' && get(this, '_logAnalyticsPageViews')) {
 			this._log(type, args);
-		} else if (EVENTS.indexOf(type) > -1 && this.get('_logAnalyticsEvents')) {
+		} else if (EVENTS.indexOf(type) > -1 && get(this, '_logAnalyticsEvents')) {
 			this._log(type, args);
 		}
 	},
@@ -227,14 +227,14 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_send(...args) {
-		const ga = this.get('_ga');
+		const ga = get(this, '_ga');
 		
 		if (ga) {
 			ga.apply(ga, ['send'].concat(args));
 
 			this.log.apply(this, args);
 		} else {
-			this.get('_awaitingEvents').push(args);
+			get(this, '_awaitingEvents').push(args);
 		}
 	},
 
@@ -247,7 +247,7 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_sendPageView(page, title, options) {
-		const ga = this.get('_ga');
+		const ga = get(this, '_ga');
 		
 		if (ga) {
 			ga('set', 'page', page);
@@ -258,7 +258,7 @@ export default Ember.Service.extend({
 
 			this.log('pageview', page, title, options);
 		} else {
-			this.get('_awaitingPageViews').push({
+			get(this, '_awaitingPageViews').push({
 				page,
 				title,
 				options,
@@ -273,7 +273,7 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_sendPreviousEvents() {
-		const events = this.get('_awaitingEvents');
+		const events = get(this, '_awaitingEvents');
 		if (!events.length) {
 			return;
 		}
@@ -293,7 +293,7 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	_sendPreviousPageViews() {
-		const pageviews = this.get('_awaitingPageViews');
+		const pageviews = get(this, '_awaitingPageViews');
 		if (!pageviews.length) {
 			return;
 		}
