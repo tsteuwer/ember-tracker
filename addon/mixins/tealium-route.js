@@ -16,7 +16,6 @@ export const DEFAULT_VIEW = {
 const {
 	run,
 	typeOf,
-	testing,
 } = Ember;
 
 export default Ember.Mixin.create({
@@ -35,7 +34,7 @@ export default Ember.Mixin.create({
 
 		this._super(...arguments);
 
-		if (!testing && IN_BROWSER) {
+		if (!Ember.testing && IN_BROWSER) {
 			this._etCheckForUtag();
 		}
 	},
