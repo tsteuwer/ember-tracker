@@ -13,7 +13,6 @@ const {
 	get,
 	getOwner,
 	run,
-	testing,
 } = Ember;
 
 const LOG_PREFIX = '[EmberTracker]';
@@ -90,7 +89,7 @@ export default Ember.Service.extend({
 			_logAnalyticsEvents: get(config, 'emberTracker.analyticsSettings.LOG_EVENTS'),
 		});
 
-		if (!testing && IN_BROWSER) {
+		if (!Ember.testing && IN_BROWSER) {
 			this._etCheckForGA();
 		}
 	},
@@ -181,7 +180,7 @@ export default Ember.Service.extend({
 	 * @return {undefined}
 	 */
 	log(type, ...args) {
-		if (testing) {
+		if (Ember.testing) {
 			return;
 		}
 
