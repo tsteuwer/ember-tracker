@@ -1,12 +1,13 @@
+import Route from '@ember/routing/route';
+import { on } from '@ember/object/evented';
 import Ember from 'ember';
 import { IN_BROWSER } from 'ember-tracker/-privates/utils';
 
 const {
-	on,
-	testing,
+    testing
 } = Ember;
 
-export default Ember.Route.extend({
+export default Route.extend({
 	title: 'Ember Tracker: Easily add tracking to your Ember JS application.',
 	description: 'ember-tracker is a simple Ember JS addon which implements Google Analytics, Tealium, and other tracking software for your Ember application.',
 	keywords: ['ember-tracker', 'ember', 'addon', 'javascript', 'es6', 'google-analytics', 'tealium', 'tracking', 'tracker'],

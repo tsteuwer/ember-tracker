@@ -1,10 +1,12 @@
+import { assert } from '@ember/debug';
+import { on } from '@ember/object/evented';
+import Mixin from '@ember/object/mixin';
+import { run } from '@ember/runloop';
+import { typeOf } from '@ember/utils';
+import { getWithDefault } from '@ember/object';
 import Ember from 'ember';
 import { getCurrentRoute, mergeObjects } from 'ember-tracker/-privates/utils';
 import { IN_BROWSER } from 'ember-tracker/-privates/utils';
-
-const {
-	getWithDefault,
-} = Ember;
 
 export const DEFAULT_VIEW = {
 	customerId: null,
@@ -13,12 +15,7 @@ export const DEFAULT_VIEW = {
 	page_type: 'home',
 };
 
-const {
-	run,
-	typeOf,
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 	/**
 	 * Sets the utag.
 	 * @public
@@ -77,14 +74,14 @@ export default Ember.Mixin.create({
 	 * @observer
 	 * @return {undefined}
 	 */
-	_etTealium: Ember.on('didTransition', function() {
+	_etTealium: on('didTransition', function() {
 		const routeName = this.get('currentRouteName'),
 			route = this._etGetCurrentRoute(routeName),
 			hasTealiumFn = typeOf(route.getTealiumView) === 'function',
 			utag = this.get('_tealium'),
 			currView = {};
 
-		Ember.assert(hasTealiumFn, `${routeName} route doesn't have a "getTealiumView" function`);
+		assert(hasTealiumFn, `${routeName} route doesn't have a "getTealiumView" function`);
 
 		mergeObjects(currView, DEFAULT_VIEW);
 

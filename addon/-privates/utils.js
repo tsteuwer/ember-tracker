@@ -1,6 +1,8 @@
 /*global window document*/
 
-import Ember from 'ember';
+import { assign, merge } from '@ember/polyfills';
+
+import { getOwner } from '@ember/application';
 
 /**
  * Returns the route.
@@ -9,7 +11,7 @@ import Ember from 'ember';
  * @return {Route}
  */
 export function getCurrentRoute(context, routeName) {
-	return Ember.getOwner(context).lookup(`route:${routeName}`);
+	return getOwner(context).lookup(`route:${routeName}`);
 }
 
 /**
@@ -17,7 +19,7 @@ export function getCurrentRoute(context, routeName) {
  * @public
  * @type {Function}
  */
-export const mergeObjects = Ember.assign || Ember.merge;
+export const mergeObjects = assign || merge;
 
 /**
  * Find out if we're in fastboot.
@@ -31,4 +33,4 @@ export const IN_BROWSER = !!window && !!window.document;
  * @public
  * @type {Function}
  */
-export const mergeOrAssign = Ember.assign || Ember.merge;
+export const mergeOrAssign = assign || merge;

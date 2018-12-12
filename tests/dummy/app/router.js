@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
 import TealiumRoute from 'ember-tracker/mixins/tealium-route';
 
-const Router = Ember.Router.extend(
+const Router = EmberRouter.extend(
     GoogleAnalyticsRoute,
     TealiumRoute, {
         location: config.locationType,
