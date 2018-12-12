@@ -119,25 +119,22 @@ I've put together more documentation on the [ember-tracker][main-site-url] websi
 
 # Addon Maintenance
 
-## Installation
+Installation
+------------------------------------------------------------------------------
 
-* `git clone <repository-url>` this repository
-* `cd ember-tracker`
-* `npm install`
-* `bower install`
+```
+ember install my-addon
+```
 
-## Running
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+Usage
+------------------------------------------------------------------------------
 
-## Running Tests
+[Longer description of how to use the addon in apps.]
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
 
-## Building
+License
+------------------------------------------------------------------------------
 
 * `ember build`
 

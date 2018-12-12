@@ -1,24 +1,20 @@
 /*eslint no-console: ["error", { allow: ["info", "log"] }] */
 /*eslint no-unused-vars: 0 */
+import Service from '@ember/service';
+
+import { assert } from '@ember/debug';
+import { bool, alias } from '@ember/object/computed';
+import { get } from '@ember/object';
+import { getOwner } from '@ember/application';
+import { run } from '@ember/runloop';
 import Ember from 'ember';
 
 import { IN_BROWSER, mergeOrAssign } from 'ember-tracker/-privates/utils';
 
-const {
-	assert,
-	computed: {
-		alias,
-		bool,
-	},
-	get,
-	getOwner,
-	run,
-} = Ember;
-
 const LOG_PREFIX = '[EmberTracker]';
 const EVENTS = ['event', 'network', 'timing'];
 
-export default Ember.Service.extend({
+export default Service.extend({
 	/**
 	 * The raw window.ga object.
 	 * @public

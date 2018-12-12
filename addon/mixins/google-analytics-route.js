@@ -1,16 +1,11 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { inject as service } from '@ember/service';
+import { on } from '@ember/object/evented';
+import { typeOf } from '@ember/utils';
 import { getCurrentRoute } from 'ember-tracker/-privates/utils';
 import { IN_BROWSER } from 'ember-tracker/-privates/utils';
 
-const {
-	inject: {
-		service,
-	},
-	on,
-	typeOf,
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 	/**
 	 * Add the Google Analytics services to each route so it's available.
 	 * @public

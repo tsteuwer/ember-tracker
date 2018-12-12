@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+export default Route.extend({
 	model() {
-		return Ember.Object.create({
+		return EmberObject.create({
 			githubLink: 'https://github.com/tsteuwer/ember-tracker',
 			travisBadge: 'https://travis-ci.org/tsteuwer/ember-tracker.svg?branch=master',
 			travisLink: 'https://travis-ci.org/tsteuwer/ember-tracker',
