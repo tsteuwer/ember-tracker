@@ -53,4 +53,4 @@ before_install:
   - npm --version
 
 script:
-  - npx ember try:one -skip-cleanup $EMBER_TRY_SCENARIO
+  - node_modules/.bin/ember try:one -skip-cleanup $EMBER_TRY_SCENARIO
