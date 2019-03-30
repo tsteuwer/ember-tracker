@@ -1,100 +1,117 @@
 <h3>Tealium IQ</h3>
 <hr>
 <h4>API</h4>
-<p>With the <code>TealiumRoute</code> mixin, you can add <a href="https://tealiumiq.com">Tealium IQ</a> effortlessly to your routes.</p>
+<p>
+  With the 
+  <code>TealiumRoute</code> 
+  mixin, you can add 
+  <a 
+    href="https://tealiumiq.com"
+  >
+    Tealium IQ
+  </a> 
+  effortlessly to your routes.
+</p>
 <hr>
 <h4>Configuring Tealium IQ</h4>
 <p>
-To allow Tealium, simply open the <code>config/environment.js</code> file and add a new object to the <code>ENV</code> variable called <code>emberTracker</code>. Finally, add an object called <code>tealiumSettings</code> with a your <code>accountName</code> as an additional property. Your config should look something similar to:
+  To allow Tealium, simply open the <code>config/environment.js</code> file and add a new object to the <code>ENV</code> variable called <code>emberTracker</code>. Finally, add an object called <code>tealiumSettings</code> with a your <code>accountName</code> as an additional property. Your config should look something similar to:
 </p>
 
-<pre>[...]
-module.exports = function(environment) {
-	var ENV = {
-		[...]
-		APP: {
-			// Here you can pass flags/options to your application instance
-			// when it is created
-		},
-		emberTracker: {
-			tealiumSettings: {
-				accountName: 'myAccName',
-			},
-		},
-	};
-[...]</pre>
+<pre>
+  [...]
+  module.exports = function(environment) {
+    var ENV = {
+      [...]
+      APP: {
+        // Here you can pass flags/options to your application instance
+        // when it is created
+      },
+      emberTracker: {
+        tealiumSettings: {
+          accountName: 'myAccName',
+        },
+      },
+    };
+  [...]
+</pre>
 <p>
-	<strong>Options</strong>
+  <strong>Options</strong>
 </p>
 <p>
-	There is one option available for Tealium you may wish to use in your <code>environment.js</code> file. It is:
+  There is one option available for Tealium you may wish to use in your <code>environment.js</code> file. It is:
 </p>
 <p>
-	<ul>
-		<li><code>onload</code> (boolean) - Lazy loads Tealium after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
-	</ul>
+  <ul>
+    <li><code>onload</code> (boolean) - Lazy loads Tealium after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
+  </ul>
 </p>
 <hr>
 <h4>Tracking Routes</h4>
 <p>First, open up your <code>router.js</code> file and add the <code>TealiumRoute</code> mixin like below:</p>
-<pre>import Ember from 'ember';
-import config from './config/environment';
-import TealiumRoute from 'ember-tracker/mixins/tealium-route';
+<pre>
+  import Ember from 'ember';
+  import config from './config/environment';
+  import TealiumRoute from 'ember-tracker/mixins/tealium-route';
 
-const Router = Ember.Router.extend(TealiumRoute, {
-	location: config.locationType,
-	rootURL: config.rootURL
-});
+  const Router = Ember.Router.extend(TealiumRoute, {
+    location: config.locationType,
+    rootURL: config.rootURL
+  });
 
-Router.map(function() {
-	// your routes
-});
+  Router.map(function() {
+    // your routes
+  });
 
-export default Router;
+  export default Router;
 </pre>
 <p>
-	Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Tealium account name information.
+  Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Tealium account name information.
 </p>
-<pre>module.exports = function(environment) {
-	// ...
+<pre>
+  module.exports = function(environment) {
+  // ...
 
-	ENV.analyticsSettings = {
-		accountName: 'mybiz',
-	};
+  ENV.analyticsSettings = {
+    accountName: 'mybiz',
+  };
 
-	// ...</pre>
+  // ...
+</pre>
 <p>
-	Finally, you need to add a method on your routes called <code>getTealiumView</code>. This will be all the data you need to send that you would normally put in the <code>utag_data</code> object. For example:
+  Finally, you need to add a method on your routes called <code>getTealiumView</code>. This will be all the data you need to send that you would normally put in the <code>utag_data</code> object. For example:
 </p>
-<pre>import Ember from 'ember';
+<pre>
+  import Ember from 'ember';
 
-export default Ember.Route.extend({
-	// ...
-	getTealiumView() {
-		return {
-			customerId: this.get('memberService.id'),
-			order_currency: this.get('order.currency'),
-			page_type: 'checkout',
-		};
-	},
-	// ...
-});</pre>
+  export default Ember.Route.extend({
+    // ...
+    getTealiumView() {
+      return {
+        customerId: this.get('memberService.id'),
+        order_currency: this.get('order.currency'),
+        page_type: 'checkout',
+      };
+    },
+    // ...
+  });
+</pre>
 <div class="alert alert-warning">
-	By default, we add the following properties to the object:
-	<ul>
-		<li>
-			<code>customerId</code>: <code>null</code>
-		</li>
-		<li>
-			<code>domain</code>: we retrieve this from <code>location.hostname</code>
-		</li>
-		<li>
-			<code>order_currency</code>: USD
-		</li>
-		<li>
-			<code>page_type</code>: home
-		</li>
-	</ul>
-	Anything you pass back from <code>getTealiumView</code> will overwrite these properties.
+  By default, we add the following properties to the object:
+  <ul>
+    <li>
+      <code>customerId</code>: <code>null</code>
+    </li>
+    <li>
+      <code>domain</code>: we retrieve this from <code>location.hostname</code>
+    </li>
+    <li>
+      <code>order_currency</code>: USD
+    </li>
+    <li>
+      <code>page_type</code>: home
+    </li>
+  </ul>
+  Anything you pass back from <code>getTealiumView</code> will overwrite these properties.
 </div>
 {{outlet}}

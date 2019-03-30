@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
-	googleAnalytics: Ember.inject.service(),
+export default Controller.extend({
+	googleAnalytics: service(),
 	actions: {
 		sendEvent() {
 			this.get('googleAnalytics').event('Testing Category', 'click', 'Test Label', 1);

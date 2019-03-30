@@ -3,168 +3,206 @@
 <h4>API</h4>
 <p>With the Google Analytics service, you have access to four methods.</p>
 <ol>
-	<li><code>event(category:String, action:String, label:String, value:Number: fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/events">Documentation</a></li>
-	<li><code>pageview(page:String, title:String)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/pages">Documentation</a></li>
-	<ul>
-		<li>Note: <code>page</code> is used to <code>ga('set', 'page', page)</code> so that all other methods get sent under the correct route.</li>
-	</ul>
-	<li><code>social(network:String, action:String, target:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/social-interactions">Documentation</a></li>
-	<li><code>timing(category:String, timingVar:String, timingVar:Number, timingLabel:String, fields:Object)</code>: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings">Documentation</a></li>
+  <li>
+    <code>event(category:String, action:String, label:String, value:Number: fields:Object)</code>: 
+    <a 
+      href="https://developers.google.com/analytics/devguides/collection/analyticsjs/events"
+    >
+      Documentation
+    </a>
+  </li>
+  <li>
+    <code>pageview(page:String, title:String)</code>: 
+    <a 
+      href="https://developers.google.com/analytics/devguides/collection/analyticsjs/pages"
+    >
+      Documentation
+    </a>
+  </li>
+  <ul>
+    <li>Note: <code>page</code> is used to <code>ga('set', 'page', page)</code> so that all other methods get sent under the correct route.</li>
+  </ul>
+  <li>
+    <code>social(network:String, action:String, target:String, fields:Object)</code>: 
+    <a 
+      href="https://developers.google.com/analytics/devguides/collection/analyticsjs/social-interactions"
+    >
+      Documentation
+    </a>
+  </li>
+  <li>
+    <code>timing(category:String, timingVar:String, timingVar:Number, timingLabel:String, fields:Object)</code>: 
+    <a 
+      href="https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings"
+    >
+      Documentation
+    </a>
+  </li>
 </ol>
 <hr>
 <h4>Configuring Google Analytics</h4>
-<p>After you've installed the addon, open your config file located in <code>config/environment.js</code>. Next, add a new object to the <code>ENV</code> variable called <code>emberTracker</code>. Finally, add an object on it called <code>analyticsSettings</code> with your <code>trackingId</code>. Your config should look something similar to:
+<p>
+  After you've installed the addon, open your config file located in <code>config/environment.js</code>. Next, add a new object to the <code>ENV</code> variable called <code>emberTracker</code>. Finally, add an object on it called <code>analyticsSettings</code> with your <code>trackingId</code>. Your config should look something similar to:
 </p>
-<pre>[...]
-module.exports = function(environment) {
-	var ENV = {
-		[...]
-		APP: {
-			// Here you can pass flags/options to your application instance
-			// when it is created
-		},
-		emberTracker: {
-			analyticsSettings: {
-				trackingId: 'UA-########-#',
-			},
-		},
-	};
-[...]</pre>
+<pre>
+  [...]
+    module.exports = function(environment) {
+      var ENV = {
+        [...]
+        APP: {
+          // Here you can pass flags/options to your application instance
+          // when it is created
+        },
+        emberTracker: {
+          analyticsSettings: {
+            trackingId: 'UA-########-#',
+          },
+        },
+      };
+  [...]
+</pre>
 <p>Feel free to change your trackingId based on the environment you're in.</p>
 <p>Now, you can add the GoogleAnalyticsRoute mixin to your Router to start tracking pageviews and inject the service into your controllers/components.</p>
 <p>
-	<strong>Options</strong>
+  <strong>Options</strong>
 </p>
 <p>
-	There are three options available for Google Analytics you may want to use in your <code>environment.js</code> file. They are:
+  There are three options available for Google Analytics you may want to use in your <code>environment.js</code> file. They are:
 </p>
 <p>
-	<ul>
-		<li><code>LOG_PAGEVIEW</code> (boolean) - Logs all <code>pageview</code> events to the console.</li>
-		<li><code>LOG_EVENTS</code> (boolean) - Logs all <code>event</code>, <code>timing</code> and <code>network</code> (social) requests to the console.</li>
-		<li><code>onload</code> (boolean) - Lazy loads GoogleAnalytics after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
-		<li>
-			<code>createOptions</code> (object) - Adds create options to your <code>ga('create', 'UA-####', { ..options..})</code> call. This object will be encoded through <code>JSON.stringify</code>.
-		</li>
-		<li><code>afterCreate</code> (string) - Appended to the JavaScript after the call to <code>ga('create', 'UA-####');</code>. Use this to run JavaScript after the "create" function, such as Optimizely's "activeUniversalAnalytics" call.</li>
-	</ul>
+  <ul>
+    <li><code>LOG_PAGEVIEW</code> (boolean) - Logs all <code>pageview</code> events to the console.</li>
+    <li><code>LOG_EVENTS</code> (boolean) - Logs all <code>event</code>, <code>timing</code> and <code>network</code> (social) requests to the console.</li>
+    <li><code>onload</code> (boolean) - Lazy loads GoogleAnalytics after the <code>window.onload</code> event fires. It uses <code>addEventListener</code> which requires >= IE9.</li>
+    <li>
+      <code>createOptions</code> (object) - Adds create options to your <code>ga('create', 'UA-####', { ..options..})</code> call. This object will be encoded through <code>JSON.stringify</code>.
+    </li>
+    <li>
+      <code>afterCreate</code> (string) - Appended to the JavaScript after the call to <code>ga('create', 'UA-####');</code>. Use this to run JavaScript after the "create" function, such as Optimizely's "activeUniversalAnalytics" call.
+    </li>
+  </ul>
 </p>
 <p>
-	These options allow you to ensure your events are being fired.
+  These options allow you to ensure your events are being fired.
 </p>
 <hr>
 <h4>Tracking Routes</h4>
 <p>First, open up your <code>router.js</code> file and add the <code>GoogleAnalyticsRoute</code> mixin like below:</p>
-<pre>import Ember from 'ember';
-import config from './config/environment';
-import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
+<pre>
+  import Ember from 'ember';
+  import config from './config/environment';
+  import GoogleAnalyticsRoute from 'ember-tracker/mixins/google-analytics-route';
 
-const Router = Ember.Router.extend(GoogleAnalyticsRoute, {
-	location: config.locationType,
-	rootURL: config.rootURL
-});
+  const Router = Ember.Router.extend(GoogleAnalyticsRoute, {
+    location: config.locationType,
+    rootURL: config.rootURL
+  });
 
-Router.map(function() {
-	// your routes
-});
+  Router.map(function() {
+    // your routes
+  });
 
-export default Router;
+  export default Router;
 </pre>
 <p>
-	Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Analytics account information.
+  Next, open up your <code>/config/environment.js</code> file. This is where you'll set your Analytics account information.
 </p>
-<pre>module.exports = function(environment) {
+<pre>
+  module.exports = function(environment) {
 	// ...
 
 	ENV.emberTracker = {
 		trackingId: 'UA-########-#',
 	};
 
-	// ...</pre>
-<p>
-	<strong>That's it!</strong>
-</p>
-<p>
-	<div class="alert alert-warning">
-		<strong>NOTE</strong>
-		<p>
-			I encourage you to setup "dev" and "staging" tracking IDs in your Google Analytics account so that you do not touch production data. Use the <code>environment</code> variable in your config file to set these up.
-		</p>
-	</div>
-</p>
-<p>
-	By default, the addon will:
-	<ul>
-		<li>grab the current <code>Route</code> look for a <code>title</code> property. If that doesn't exsist, it will use the <code>document.title</code>.</li>
-		<li>use <code>location.pathname</code> as the URL.</li>
-	</ul>
-</p>
-<p>
-	To override any of the above, you can provide a method on your Route called <code>beforeGoogleAnalytics</code> that will return an object with either a <code>title</code>, <code>page</code>, or both, and it will use those instead.
-</p>
-<p>
-Lets say you want all page views for <code>/member/123</code> (or <code>/member/*</code> for that matter), to be sent as <code>/member</code> since the <code>:memberId</code> might be private. All you have to do is:
-</p>
-<pre>import Ember from 'ember';
-
-export default Ember.Route.extend({
-	beforeGoogleAnalytics() {
-		return {
-			title: 'Member Profile',
-			page: '/member',
-		};
-	},
 	// ...
-});
+</pre>
+<p>
+  <strong>That's it!</strong>
+</p>
+<p>
+  <div class="alert alert-warning">
+    <strong>NOTE</strong>
+    <p>
+      I encourage you to setup "dev" and "staging" tracking IDs in your Google Analytics account so that you do not touch production data. Use the <code>environment</code> variable in your config file to set these up.
+    </p>
+  </div>
+</p>
+<p>
+  By default, the addon will:
+  <ul>
+    <li>grab the current <code>Route</code> look for a <code>title</code> property. If that doesn't exsist, it will use the <code>document.title</code>.</li>
+    <li>use <code>location.pathname</code> as the URL.</li>
+  </ul>
+</p>
+<p>
+  To override any of the above, you can provide a method on your Route called <code>beforeGoogleAnalytics</code> that will return an object with either a <code>title</code>, <code>page</code>, or both, and it will use those instead.
+</p>
+<p>
+  Lets say you want all page views for <code>/member/123</code> (or <code>/member/*</code> for that matter), to be sent as <code>/member</code> since the <code>:memberId</code> might be private. All you have to do is:
+</p>
+<pre>
+  import Ember from 'ember';
+
+  export default Ember.Route.extend({
+    beforeGoogleAnalytics() {
+      return {
+        title: 'Member Profile',
+        page: '/member',
+      };
+    },
+    // ...
+  });
 </pre>
 <hr>
 <h4>Tracking Events</h4>
 <p><strong>Example</strong></p>
 <p>
-	Events are very simple. The first thing you must do is the inject the service. From then on, you can call any of the following methods: <code>event</code>, <code>timing</code>, or <code>social</code>. 
+  Events are very simple. The first thing you must do is the inject the service. From then on, you can call any of the following methods: <code>event</code>, <code>timing</code>, or <code>social</code>. 
 </p>
-<pre>import Ember from 'ember';
+<pre>
+  import Ember from 'ember';
 
-export default Ember.Component.extend({
-	googleAnalytics: Ember.inject.service(),
-	// ...
-	actions: {
-		toggleFormState() {
-			this.toggleProperty('showing');
-			this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
-		},
-		trackTweet() {
-			//...
-			this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
-		},
-		trackTiming() {
-			var start = Date.now();
-			this.get('ajax')
-				.then(this.get('onResolve'), this.get('onReject'))
-				.finally(() => {
-					this.get('googleAnalytics).timing('Ajax Speed', Date.now() - start, 'My Component Speed');
-				});
-		},
-		//...
-	},
-});
+  export default Ember.Component.extend({
+    googleAnalytics: Ember.inject.service(),
+    // ...
+    actions: {
+      toggleFormState() {
+        this.toggleProperty('showing');
+        this.get('googleAnalytics').event('My Category', 'click', 'Toggle Form');
+      },
+      trackTweet() {
+        //...
+        this.get('googleAnalytics').social('Twitter', 'tweet', 'http://ctt.ec/HCfaQ');
+      },
+      trackTiming() {
+        var start = Date.now();
+        this.get('ajax')
+          .then(this.get('onResolve'), this.get('onReject'))
+          .finally(() => {
+            this.get('googleAnalytics).timing('Ajax Speed', Date.now() - start, 'My Component Speed');
+          });
+      },
+      //...
+    },
+  });
 </pre>
 <hr>
 <h4>For Development &amp; Testing</h4>
 <p>
-	<button class="btn" {{action "sendEvent"}}>
-		Test Event
-	</button>
-	<button class="btn" {{action "sendTiming"}}>
-		Test Timing
-	</button>
-	<button class="btn" {{action "sendSocial"}}>
-		Test Social
-	</button>
-	<p>
-		{{#link-to "google-analytics.test-nested-route"}}Test Nested Route{{/link-to}} | 
-		{{#link-to "google-analytics.test-with-slug" "some kind of slug"}}Test Slug Route{{/link-to}} | 
-		{{#link-to "google-analytics.test-with-id" 123}}Test ID Route{{/link-to}}
-	</p>
+  <button class="btn" {{action "sendEvent"}}>
+    Test Event
+  </button>
+  <button class="btn" {{action "sendTiming"}}>
+    Test Timing
+  </button>
+  <button class="btn" {{action "sendSocial"}}>
+    Test Social
+  </button>
+  <p>
+    {{#link-to "google-analytics.test-nested-route"}}Test Nested Route{{/link-to}} | 
+    {{#link-to "google-analytics.test-with-slug" "some kind of slug"}}Test Slug Route{{/link-to}} | 
+    {{#link-to "google-analytics.test-with-id" 123}}Test ID Route{{/link-to}}
+  </p>
 </p>
 {{outlet}}

@@ -1,18 +1,25 @@
 <div class="container">
   <div class="pull-right badges">
     <a class="top-badge" href={{model.npmLink}}>
-      <img src={{model.npmBadge}} />
+      <img src={{model.npmBadge}} alt="">
     </a>
     <a class="top-badge" href={{model.travisLink}}>
-      <img src={{model.travisBadge}} />
+      <img src={{model.travisBadge}} alt="">
     </a>
     <a class="top-badge github-logo" href={{model.githubLink}}>
-      <img width="32px" height="32px" src="/images/GitHub-Mark-32px.png" />
+      <img width="32px" height="32px" src="/images/GitHub-Mark-32px.png" alt="">
     </a>
   </div>
-	<h1>{{#link-to "index"}}Ember Tracker{{/link-to}}</h1>
-	{{outlet}}
+
+  <h1>
+    {{#link-to "index"}}
+      Ember Tracker
+    {{/link-to}}
+  </h1>
+
+  {{outlet}}
 </div>
+
 <footer>
-	Created with &hearts; by <a href="https://github.com/tsteuwer">Troy Steuwer</a>
+  Created with &hearts; by <a href="https://github.com/tsteuwer">Troy Steuwer</a>
 </footer>

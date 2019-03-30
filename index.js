@@ -1,8 +1,7 @@
-/* eslint-env node */
 'use strict';
 
 module.exports = {
-  name: 'ember-tracker',
+  name: require('./package').name,
 	
 	/**
 	 * Add our scripts to the page if enabled.
