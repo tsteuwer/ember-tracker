@@ -22,11 +22,14 @@ For more information about this addon, please visit the [Ember Tracker website][
 
 ## Minimum Requirements
 
-* Ember 2.3+
+* Ember 3+
 * Ember CLI
 * IE9+ (When using the Tealium mixin with the `onload` setting.
 
-For versions lower than 2.3, you'll need to install the [ember-getowner-polyfill][getowner-poly-url] addon.
+## Use With Ember 2.x
+For use with Ember 2.x, use version 0.5.2.
+
+For versions less than 2.3, you'll need to install the [ember-getowner-polyfill][getowner-poly-url] addon.
 
 ## Setup
 
