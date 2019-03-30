@@ -39,6 +39,13 @@ jobs:
         - npm run lint:hbs
         - npm run lint:js
         - npm test
+    - stage: "Additional Tests"
+      env: EMBER_TRY_SCENARIO=ember-lts-3.2
+      env: EMBER_TRY_SCENARIO=ember-lts-3.4
+      env: EMBER_TRY_SCENARIO=ember-lts-3.8
+      env: EMBER_TRY_SCENARIO=ember-release
+      env: EMBER_TRY_SCENARIO=ember-beta
+      env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
   - npm config set spin false
