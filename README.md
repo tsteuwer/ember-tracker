@@ -1,5 +1,11 @@
 # ember-tracker
 
+---
+
+*Hello, fellow developer!* I am currently seeking a new owner for this repository. Unfortunately, I don't work with Ember anymore and I have a lot of other priorities going on, so I can't continue to update this package. If you are part of the Ember community and would like to take over, hit me up.
+
+---
+
 [![Build Status][build-status-img]][build-status-link]
 [![NPM][npm-badge-img]][npm-badge-link]
 [![Ember Observer Score][ember-observer-badge]][ember-observer-url]
