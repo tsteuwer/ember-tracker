@@ -2,7 +2,7 @@
 
 ---
 
-*Hello, fellow developer!* I am currently seeking a new owner for this repository. Unfortunately, I don't work with Ember anymore and I have a lot of other priorities going on, so I can't continue to update this package. If you are part of the Ember community and would like to take over, hit me up.
+*Hello, fellow developer!* This repository is officially deprecated in favor of [Ember Metrics](https://github.com/poteto/ember-metrics). Unfortunately, I don't work with Ember anymore and I have a lot of other priorities going on, so I can't continue to update this package. Thanks for all the help and usage over the years. Much appreciated! <3
 
 ---
 
